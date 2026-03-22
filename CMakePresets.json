@@ -1,0 +1,74 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "clang-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "clang-debug",
+      "inherits": "clang-base",
+      "displayName": "Clang Debug",
+      "description": "Build both client and server with clang in Debug mode"
+    },
+    {
+      "name": "clang-client-debug",
+      "inherits": "clang-base",
+      "displayName": "Clang Client Debug",
+      "description": "Build only the client target with clang in Debug mode",
+      "cacheVariables": {
+        "BATTLESHIP_BUILD_CLIENT": "ON",
+        "BATTLESHIP_BUILD_SERVER": "OFF"
+      }
+    },
+    {
+      "name": "clang-server-debug",
+      "inherits": "clang-base",
+      "displayName": "Clang Server Debug",
+      "description": "Build only the server target with clang in Debug mode",
+      "cacheVariables": {
+        "BATTLESHIP_BUILD_CLIENT": "OFF",
+        "BATTLESHIP_BUILD_SERVER": "ON"
+      }
+    },
+    {
+      "name": "clang-release",
+      "inherits": "clang-base",
+      "displayName": "Clang Release",
+      "description": "Build both client and server with clang in Release mode",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-debug",
+      "configurePreset": "clang-debug"
+    },
+    {
+      "name": "build-client",
+      "configurePreset": "clang-client-debug"
+    },
+    {
+      "name": "build-server",
+      "configurePreset": "clang-server-debug"
+    },
+    {
+      "name": "build-release",
+      "configurePreset": "clang-release"
+    }
+  ]
+}
