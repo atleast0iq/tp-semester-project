@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
   QCommandLineOption portOption(
       QStringList() << QStringLiteral("p") << QStringLiteral("port"),
       QStringLiteral("Port for the TCP battleship server."),
-      QStringLiteral("port"), QStringLiteral("4242"));
+      QStringLiteral("port"), QStringLiteral("6767"));
   QCommandLineOption addressOption(
       QStringList() << QStringLiteral("a") << QStringLiteral("address"),
       QStringLiteral("Listening address."), QStringLiteral("address"),

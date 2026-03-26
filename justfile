@@ -68,11 +68,11 @@ rebuild-server:
     cmake --build --preset build-server
 
 [doc("Run the Debug server build")]
-run-server port="4242" database="battleship.db" address="0.0.0.0": build-server
+run-server port="6767" database="battleship.db" address="0.0.0.0": build-server
     ./build/clang-server-debug/battleship_server --address {{address}} --port {{port}} --database {{database}}
 
 [doc("Run the Debug client build")]
-run-client host="127.0.0.1" port="4242": build-client
+run-client host="127.0.0.1" port="6767": build-client
     ./build/clang-client-debug/battleship_client --host {{host}} --port {{port}}
 
 [doc("Build the Docker image for the server")]

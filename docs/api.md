@@ -223,7 +223,7 @@ Payload:
 Пример интерактивной сессии:
 
 ```bash
-./build/clang-client-debug/battleship_client --host 127.0.0.1 --port 4242
+./build/clang-client-debug/battleship_client --host 127.0.0.1 --port 6767
 ```
 
 ```text

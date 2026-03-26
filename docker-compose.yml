@@ -5,14 +5,14 @@ services:
       dockerfile: Dockerfile
       target: runtime
     ports:
-      - "4242:4242"
+      - "6767:6767"
     volumes:
       - battleship_data:/data
     command:
       - "--address"
       - "0.0.0.0"
       - "--port"
-      - "4242"
+      - "6767"
       - "--database"
       - "/data/battleship.db"
     restart: unless-stopped

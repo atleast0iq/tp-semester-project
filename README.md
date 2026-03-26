@@ -56,12 +56,12 @@ cmake --build --preset build-release
 ## Запуск
 Запустить сервер:
 ```bash
-./build/{preset}/battleship_server --address 0.0.0.0 --port 4242 --database battleship.db
+./build/{preset}/battleship_server --address 0.0.0.0 --port 6767 --database battleship.db
 ```
 
 Запустить консольный клиент:
 ```bash
-./build/{preset}/battleship_client --host 127.0.0.1 --port 4242
+./build/{preset}/battleship_client --host 127.0.0.1 --port 6767
 ```
 
 Пример команд в клиенте:

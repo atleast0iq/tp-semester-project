@@ -36,8 +36,8 @@ WORKDIR /opt/battleship
 COPY --from=build /app/build/docker-server/battleship_server ./battleship_server
 COPY --from=build /app/build/docker-server/migrations ./migrations
 
-EXPOSE 4242
+EXPOSE 6767
 VOLUME ["/data"]
 
 ENTRYPOINT ["./battleship_server"]
-CMD ["--address", "0.0.0.0", "--port", "4242", "--database", "/data/battleship.db"]
+CMD ["--address", "0.0.0.0", "--port", "6767", "--database", "/data/battleship.db"]

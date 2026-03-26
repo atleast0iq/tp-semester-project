@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
   QCommandLineOption portOption(
       QStringList() << QStringLiteral("p") << QStringLiteral("port"),
       QStringLiteral("Server port."), QStringLiteral("port"),
-      QStringLiteral("4242"));
+      QStringLiteral("6767"));
   QCommandLineOption timeoutOption(
       QStringList() << QStringLiteral("t") << QStringLiteral("timeout"),
       QStringLiteral("Socket timeout in milliseconds."), QStringLiteral("ms"),
