@@ -1,7 +1,14 @@
 build/
-
 compile_commands.json
-
 .cache
-
 .vscode
+
+
+.qtcreator/
+cmake-build-*/
+CMakeFiles/CMakeCache.txt
+
+.exe
+.obj
+
+.user
