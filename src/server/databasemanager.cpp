@@ -1,35 +1,79 @@
 #include "databasemanager.h"
 
+#include <algorithm>
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
+#include <QScopeGuard>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QtNetwork/qpassworddigestor.h>
 #include <QUuid>
 #include <QVariant>
 
 namespace {
 
 constexpr int kMinPasswordLength = 4;
+constexpr int kPasswordHashIterations = 120000;
+constexpr quint64 kPasswordHashLength = 32;
+constexpr auto kInsertUserSql =
+    "INSERT INTO users(username, password_hash, password_salt) "
+    "VALUES(:username, :password_hash, :password_salt)";
+constexpr auto kSelectUserByUsernameSql =
+    "SELECT id, password_hash, password_salt FROM users "
+    "WHERE username = :username";
+constexpr auto kSelectStatsByUserIdSql =
+    "SELECT user_id, username, games_played, wins, losses, shots, hits "
+    "FROM user_statistics_view "
+    "WHERE user_id = :user_id";
+constexpr auto kSelectStatsByUsernameSql =
+    "SELECT user_id, username, games_played, wins, losses, shots, hits "
+    "FROM user_statistics_view "
+    "WHERE username = :username";
+constexpr auto kRecordShotSql =
+    "UPDATE user_stats "
+    "SET shots = shots + 1, hits = hits + :hit_increment "
+    "WHERE user_id = :user_id";
+constexpr auto kRecordWinnerSql =
+    "UPDATE user_stats "
+    "SET games_played = games_played + 1, wins = wins + 1 "
+    "WHERE user_id = :user_id";
+constexpr auto kRecordLoserSql =
+    "UPDATE user_stats "
+    "SET games_played = games_played + 1, losses = losses + 1 "
+    "WHERE user_id = :user_id";
 
 QString formatQueryError(const QSqlQuery& query, const QString& context) {
   return QStringLiteral("%1: %2").arg(context,
                                       query.lastError().text().trimmed());
 }
 
+QString databaseErrorText(const QSqlDatabase& database) {
+  return database.lastError().text().trimmed();
+}
+
+QString normalizeUsername(const QString& username) { return username.trimmed(); }
+
+const QRegularExpression& migrationFilePattern() {
+  static const QRegularExpression kPattern(
+      QStringLiteral(R"(^(\d{3})_.*\.sql$)"));
+  return kPattern;
+}
+
 QString generateSalt() {
-  return QUuid::createUuid().toString(QUuid::WithoutBraces);
+  return QUuid::createUuid().toRfc4122().toHex();
 }
 
 QString hashPassword(const QString& password, const QString& salt) {
-  return QString::fromLatin1(
-      QCryptographicHash::hash(
-          QStringLiteral("%1:%2").arg(salt, password).toUtf8(),
-          QCryptographicHash::Sha256)
-          .toHex());
+  return QString::fromLatin1(QPasswordDigestor::deriveKeyPbkdf2(
+                                 QCryptographicHash::Sha256, password.toUtf8(),
+                                 salt.toUtf8(), kPasswordHashIterations,
+                                 kPasswordHashLength)
+                                 .toHex());
 }
 
 void removeDatabaseConnection(const QString& connectionName) {
@@ -48,14 +92,19 @@ void removeDatabaseConnection(const QString& connectionName) {
 }
 
 bool parseMigrationVersion(const QString& fileName, int& version) {
-  const qsizetype separatorIndex = fileName.indexOf(QLatin1Char('_'));
-  if (separatorIndex <= 0) {
+  const QRegularExpressionMatch match = migrationFilePattern().match(fileName);
+  if (!match.hasMatch()) {
     return false;
   }
 
   bool ok = false;
-  version = fileName.left(separatorIndex).toInt(&ok);
+  version = match.captured(1).toInt(&ok);
   return ok;
+}
+
+int migrationVersion(const QFileInfo& fileInfo) {
+  int version = 0;
+  return parseMigrationVersion(fileInfo.fileName(), version) ? version : -1;
 }
 
 QFileInfoList loadMigrations(QString& error) {
@@ -68,16 +117,22 @@ QFileInfoList loadMigrations(QString& error) {
   }
 
   const QFileInfoList files = migrationDir.entryInfoList(
-      {QStringLiteral("*.sql")}, QDir::Files, QDir::Name);
+      {QStringLiteral("*.sql")}, QDir::Files, QDir::NoSort);
   if (files.isEmpty()) {
     error = QStringLiteral("No SQL migrations were found.");
     return {};
   }
 
+  QFileInfoList orderedFiles = files;
+  std::sort(orderedFiles.begin(), orderedFiles.end(),
+            [](const QFileInfo& lhs, const QFileInfo& rhs) {
+              return migrationVersion(lhs) < migrationVersion(rhs);
+            });
+
   int previousVersion = -1;
-  for (const QFileInfo& fileInfo : files) {
-    int version = 0;
-    if (!parseMigrationVersion(fileInfo.fileName(), version)) {
+  for (const QFileInfo& fileInfo : orderedFiles) {
+    const int version = migrationVersion(fileInfo);
+    if (version < 0) {
       error = QStringLiteral(
                   "Migration file `%1` must follow `NNN_name.sql` naming.")
                   .arg(fileInfo.fileName());
@@ -92,7 +147,7 @@ QFileInfoList loadMigrations(QString& error) {
     previousVersion = version;
   }
 
-  return files;
+  return orderedFiles;
 }
 
 QString formatMigrationError(const QFileInfo& migration,
@@ -134,6 +189,31 @@ bool fetchStats(const QString& connectionName, const QString& sql,
   return true;
 }
 
+bool execSingleRowUpdate(QSqlQuery& query, const QString& failureContext,
+                         const QString& missingRowMessage, QString& error) {
+  if (!query.exec()) {
+    error = formatQueryError(query, failureContext);
+    return false;
+  }
+
+  if (query.numRowsAffected() != 1) {
+    error = missingRowMessage;
+    return false;
+  }
+
+  return true;
+}
+
+bool commitTransaction(QSqlDatabase& database, bool& committed, QString& error) {
+  if (!database.commit()) {
+    error = databaseErrorText(database);
+    return false;
+  }
+
+  committed = true;
+  return true;
+}
+
 }  // namespace
 
 DatabaseManager& DatabaseManager::instance() {
@@ -152,7 +232,7 @@ bool DatabaseManager::initialize(const QString& databasePath, QString& error) {
       QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), m_connectionName);
   database.setDatabaseName(databasePath);
   if (!database.open()) {
-    error = database.lastError().text().trimmed();
+    error = databaseErrorText(database);
     return false;
   }
 
@@ -172,12 +252,12 @@ bool DatabaseManager::initialize(const QString& databasePath, QString& error) {
 bool DatabaseManager::registerUser(const QString& username,
                                    const QString& password, UserInfo& user,
                                    QString& error) {
-  if (username.trimmed().isEmpty() || password.isEmpty()) {
+  const QString trimmedUsername = normalizeUsername(username);
+  if (trimmedUsername.isEmpty() || password.isEmpty()) {
     error = QStringLiteral("Username and password must be non-empty.");
     return false;
   }
 
-  const QString trimmedUsername = username.trimmed();
   if (password.size() < kMinPasswordLength) {
     error = QStringLiteral("Password must contain at least %1 characters.")
                 .arg(kMinPasswordLength);
@@ -186,23 +266,26 @@ bool DatabaseManager::registerUser(const QString& username,
 
   QSqlDatabase database = QSqlDatabase::database(m_connectionName);
   if (!database.transaction()) {
-    error = database.lastError().text().trimmed();
+    error = databaseErrorText(database);
     return false;
   }
+  bool committed = false;
+  const auto rollbackGuard = qScopeGuard([&database, &committed] {
+    if (!committed) {
+      database.rollback();
+    }
+  });
 
   const QString salt = generateSalt();
   const QString passwordHash = hashPassword(password, salt);
 
   QSqlQuery userInsert(database);
-  userInsert.prepare(QStringLiteral(
-      "INSERT INTO users(username, password_hash, password_salt) "
-      "VALUES(:username, :password_hash, :password_salt)"));
+  userInsert.prepare(QString::fromLatin1(kInsertUserSql));
   userInsert.bindValue(QStringLiteral(":username"), trimmedUsername);
   userInsert.bindValue(QStringLiteral(":password_hash"), passwordHash);
   userInsert.bindValue(QStringLiteral(":password_salt"), salt);
 
   if (!userInsert.exec()) {
-    database.rollback();
     if (userInsert.lastError().text().contains(QStringLiteral("UNIQUE"),
                                                Qt::CaseInsensitive)) {
       error = QStringLiteral("A user with this name already exists.");
@@ -216,9 +299,7 @@ bool DatabaseManager::registerUser(const QString& username,
 
   const qint64 userId = userInsert.lastInsertId().toLongLong();
 
-  if (!database.commit()) {
-    database.rollback();
-    error = database.lastError().text().trimmed();
+  if (!commitTransaction(database, committed, error)) {
     return false;
   }
 
@@ -230,10 +311,11 @@ bool DatabaseManager::registerUser(const QString& username,
 bool DatabaseManager::authorizeUser(const QString& username,
                                     const QString& password, UserInfo& user,
                                     QString& error) {
+  const QString trimmedUsername = normalizeUsername(username);
   qint64 userId = 0;
   QString storedPasswordHash;
   QString salt;
-  if (!queryUserByUsername(username.trimmed(), userId, storedPasswordHash, salt,
+  if (!queryUserByUsername(trimmedUsername, userId, storedPasswordHash, salt,
                            error)) {
     return false;
   }
@@ -244,100 +326,78 @@ bool DatabaseManager::authorizeUser(const QString& username,
   }
 
   user.id = userId;
-  user.username = username.trimmed();
+  user.username = trimmedUsername;
   return true;
 }
 
 bool DatabaseManager::fetchStatisticsByUserId(qint64 userId, UserStats& stats,
                                               QString& error) {
-  return fetchStats(
-      m_connectionName,
-      QStringLiteral(
-          "SELECT user_id, username, games_played, wins, losses, shots, hits "
-          "FROM user_statistics_view "
-          "WHERE user_id = :user_id"),
-      QStringLiteral(":user_id"), userId, &stats, &error);
+  return fetchStats(m_connectionName, QString::fromLatin1(kSelectStatsByUserIdSql),
+                    QStringLiteral(":user_id"), userId, &stats, &error);
 }
 
 bool DatabaseManager::fetchStatisticsByUsername(const QString& username,
                                                 UserStats& stats,
                                                 QString& error) {
-  const QString trimmedUsername = username.trimmed();
+  const QString trimmedUsername = normalizeUsername(username);
   if (trimmedUsername.isEmpty()) {
     error = QStringLiteral("Username must be provided.");
     return false;
   }
 
-  return fetchStats(
-      m_connectionName,
-      QStringLiteral(
-          "SELECT user_id, username, games_played, wins, losses, shots, hits "
-          "FROM user_statistics_view "
-          "WHERE username = :username"),
-      QStringLiteral(":username"), trimmedUsername, &stats, &error);
+  return fetchStats(m_connectionName, QString::fromLatin1(kSelectStatsByUsernameSql),
+                    QStringLiteral(":username"), trimmedUsername, &stats,
+                    &error);
 }
 
 bool DatabaseManager::recordShot(qint64 userId, bool hit, QString& error) {
   QSqlQuery query(QSqlDatabase::database(m_connectionName));
-  query.prepare(
-      QStringLiteral("UPDATE user_stats "
-                     "SET shots = shots + 1, hits = hits + :hit_increment "
-                     "WHERE user_id = :user_id"));
+  query.prepare(QString::fromLatin1(kRecordShotSql));
   query.bindValue(QStringLiteral(":hit_increment"), hit ? 1 : 0);
   query.bindValue(QStringLiteral(":user_id"), userId);
-
-  if (!query.exec()) {
-    error =
-        formatQueryError(query, QStringLiteral("Failed to update shot stats"));
-    return false;
-  }
-
-  if (query.numRowsAffected() != 1) {
-    error = QStringLiteral("Shot statistics target user was not found.");
-    return false;
-  }
-
-  return true;
+  return execSingleRowUpdate(query, QStringLiteral("Failed to update shot stats"),
+                             QStringLiteral(
+                                 "Shot statistics target user was not found."),
+                             error);
 }
 
 bool DatabaseManager::recordGameResult(qint64 winnerId, qint64 loserId,
                                        QString& error) {
   QSqlDatabase database = QSqlDatabase::database(m_connectionName);
   if (!database.transaction()) {
-    error = database.lastError().text().trimmed();
+    error = databaseErrorText(database);
     return false;
   }
+  bool committed = false;
+  const auto rollbackGuard = qScopeGuard([&database, &committed] {
+    if (!committed) {
+      database.rollback();
+    }
+  });
 
   QSqlQuery winnerQuery(database);
-  winnerQuery.prepare(
-      QStringLiteral("UPDATE user_stats "
-                     "SET games_played = games_played + 1, wins = wins + 1 "
-                     "WHERE user_id = :user_id"));
+  winnerQuery.prepare(QString::fromLatin1(kRecordWinnerSql));
   winnerQuery.bindValue(QStringLiteral(":user_id"), winnerId);
 
-  if (!winnerQuery.exec() || winnerQuery.numRowsAffected() != 1) {
-    database.rollback();
-    error = formatQueryError(winnerQuery,
-                             QStringLiteral("Failed to update winner stats"));
+  if (!execSingleRowUpdate(
+          winnerQuery, QStringLiteral("Failed to update winner stats"),
+          QStringLiteral("Winner statistics target user was not found."),
+          error)) {
     return false;
   }
 
   QSqlQuery loserQuery(database);
-  loserQuery.prepare(
-      QStringLiteral("UPDATE user_stats "
-                     "SET games_played = games_played + 1, losses = losses + 1 "
-                     "WHERE user_id = :user_id"));
+  loserQuery.prepare(QString::fromLatin1(kRecordLoserSql));
   loserQuery.bindValue(QStringLiteral(":user_id"), loserId);
 
-  if (!loserQuery.exec() || loserQuery.numRowsAffected() != 1) {
-    database.rollback();
-    error = formatQueryError(loserQuery,
-                             QStringLiteral("Failed to update loser stats"));
+  if (!execSingleRowUpdate(
+          loserQuery, QStringLiteral("Failed to update loser stats"),
+          QStringLiteral("Loser statistics target user was not found."),
+          error)) {
     return false;
   }
 
-  if (!database.commit()) {
-    error = database.lastError().text().trimmed();
+  if (!commitTransaction(database, committed, error)) {
     return false;
   }
 
@@ -380,27 +440,30 @@ bool DatabaseManager::applyMigrations(QString& error) {
 
     if (!database.transaction()) {
       error = formatMigrationError(migration,
-                                   database.lastError().text().trimmed());
+                                   databaseErrorText(database));
       return false;
     }
+    bool committed = false;
+    const auto rollbackGuard = qScopeGuard([&database, &committed] {
+      if (!committed) {
+        database.rollback();
+      }
+    });
 
     QSqlQuery query(database);
     if (!query.exec(sql)) {
-      database.rollback();
       error =
           formatMigrationError(migration, query.lastError().text().trimmed());
       return false;
     }
 
     if (!setUserVersion(version, error)) {
-      database.rollback();
       error = formatMigrationError(migration, error);
       return false;
     }
 
-    if (!database.commit()) {
-      error = formatMigrationError(migration,
-                                   database.lastError().text().trimmed());
+    if (!commitTransaction(database, committed, error)) {
+      error = formatMigrationError(migration, error);
       return false;
     }
 
@@ -447,9 +510,7 @@ bool DatabaseManager::queryUserByUsername(const QString& username,
   }
 
   QSqlQuery query(QSqlDatabase::database(m_connectionName));
-  query.prepare(
-      QStringLiteral("SELECT id, password_hash, password_salt FROM users "
-                     "WHERE username = :username"));
+  query.prepare(QString::fromLatin1(kSelectUserByUsernameSql));
   query.bindValue(QStringLiteral(":username"), username);
 
   if (!query.exec()) {
@@ -458,7 +519,7 @@ bool DatabaseManager::queryUserByUsername(const QString& username,
   }
 
   if (!query.next()) {
-    error = QStringLiteral("User was not found.");
+    error = QStringLiteral("Invalid username or password.");
     return false;
   }
 

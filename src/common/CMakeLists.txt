@@ -1,6 +1,8 @@
 add_library(battleship_common STATIC
     apiprotocol.cpp
     apiprotocol.h
+    fleetutils.cpp
+    fleetutils.h
 )
 
 target_link_libraries(battleship_common

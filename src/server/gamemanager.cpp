@@ -15,6 +15,16 @@ GameManager::ActionResult GameManager::makeSuccess(const QJsonObject& payload) {
   };
 }
 
+GameManager::ActionResult GameManager::gameNotFoundError() {
+  return makeError(QStringLiteral("game_not_found"),
+                   QStringLiteral("Game was not found."));
+}
+
+GameManager::ActionResult GameManager::playerNotInGameError() {
+  return makeError(QStringLiteral("forbidden"),
+                   QStringLiteral("Player does not belong to this game."));
+}
+
 GameManager::ActionResult GameManager::createGame(
     const PlayerIdentity& player) {
   if (!ensureUserCanStartAnotherGame(player.userId)) {
@@ -49,8 +59,7 @@ GameManager::ActionResult GameManager::joinGame(const QString& gameId,
 
   GameState* game = findGame(gameId);
   if (game == nullptr) {
-    return makeError(QStringLiteral("game_not_found"),
-                     QStringLiteral("Game was not found."));
+    return gameNotFoundError();
   }
 
   if (game->playerOne.identity.userId == player.userId) {
@@ -64,12 +73,7 @@ GameManager::ActionResult GameManager::joinGame(const QString& gameId,
         QStringLiteral("The selected game already has two players."));
   }
 
-  game->playerTwo = PlayerState{
-      .identity = player,
-      .board = GameBoard{},
-      .fleetReady = false,
-  };
-  game->status = Status::WaitingForSetup;
+  attachSecondPlayer(*game, player);
   m_userToGame.insert(player.userId, gameId);
 
   return makeSuccess(makeGamePayload(*game, player.userId));
@@ -80,14 +84,12 @@ GameManager::ActionResult GameManager::placeShips(
     const QVector<protocol::ShipPlacement>& placements) {
   GameState* game = findGame(gameId);
   if (game == nullptr) {
-    return makeError(QStringLiteral("game_not_found"),
-                     QStringLiteral("Game was not found."));
+    return gameNotFoundError();
   }
 
   PlayerState* player = findPlayer(*game, userId);
   if (player == nullptr) {
-    return makeError(QStringLiteral("forbidden"),
-                     QStringLiteral("Player does not belong to this game."));
+    return playerNotInGameError();
   }
 
   if (game->status == Status::Finished) {
@@ -101,13 +103,7 @@ GameManager::ActionResult GameManager::placeShips(
   }
 
   player->fleetReady = true;
-  if (game->playerTwo && game->playerOne.fleetReady &&
-      game->playerTwo->fleetReady) {
-    game->status = Status::Active;
-    game->turnUserId = game->playerOne.identity.userId;
-  } else if (game->playerTwo) {
-    game->status = Status::WaitingForSetup;
-  }
+  updateStatusAfterPlacement(*game);
 
   return makeSuccess(makeGamePayload(*game, userId));
 }
@@ -116,13 +112,11 @@ GameManager::ActionResult GameManager::gameState(const QString& gameId,
                                                  qint64 userId) const {
   const GameState* game = findGame(gameId);
   if (game == nullptr) {
-    return makeError(QStringLiteral("game_not_found"),
-                     QStringLiteral("Game was not found."));
+    return gameNotFoundError();
   }
 
   if (findPlayer(*game, userId) == nullptr) {
-    return makeError(QStringLiteral("forbidden"),
-                     QStringLiteral("Player does not belong to this game."));
+    return playerNotInGameError();
   }
 
   return makeSuccess(makeGamePayload(*game, userId));
@@ -132,8 +126,7 @@ GameManager::ActionResult GameManager::fire(const QString& gameId,
                                             qint64 userId, int x, int y) {
   GameState* game = findGame(gameId);
   if (game == nullptr) {
-    return makeError(QStringLiteral("game_not_found"),
-                     QStringLiteral("Game was not found."));
+    return gameNotFoundError();
   }
 
   if (game->status != Status::Active) {
@@ -149,8 +142,7 @@ GameManager::ActionResult GameManager::fire(const QString& gameId,
   PlayerState* attacker = findPlayer(*game, userId);
   PlayerState* defender = findOpponent(*game, userId);
   if (attacker == nullptr || defender == nullptr) {
-    return makeError(QStringLiteral("forbidden"),
-                     QStringLiteral("Player does not belong to this game."));
+    return playerNotInGameError();
   }
 
   GameBoard::FireResult fireResult;
@@ -165,24 +157,12 @@ GameManager::ActionResult GameManager::fire(const QString& gameId,
     return makeError(QStringLiteral("database_error"), databaseError);
   }
 
-  QJsonObject resultPayload{
-      {QStringLiteral("x"), x},
-      {QStringLiteral("y"), y},
-      {QStringLiteral("hit"), fireResult.hit},
-      {QStringLiteral("sunk"), fireResult.sunk},
-  };
-
+  QJsonObject resultPayload = fireResultJson(x, y, fireResult);
   if (defender->board.allShipsSunk()) {
-    game->status = Status::Finished;
-    game->winnerUserId = attacker->identity.userId;
-
-    if (!DatabaseManager::instance().recordGameResult(attacker->identity.userId,
-                                                      defender->identity.userId,
-                                                      databaseError)) {
+    if (!finalizeGame(*game, *attacker, *defender, resultPayload,
+                      databaseError)) {
       return makeError(QStringLiteral("database_error"), databaseError);
     }
-
-    resultPayload.insert(QStringLiteral("winner"), attacker->identity.username);
   } else if (!fireResult.hit) {
     game->turnUserId = defender->identity.userId;
   }
@@ -206,6 +186,20 @@ QString GameManager::currentGameForUser(qint64 userId) const {
   return gameId;
 }
 
+QVector<qint64> GameManager::participantUserIds(const QString& gameId) const {
+  const GameState* game = findGame(gameId);
+  if (game == nullptr) {
+    return {};
+  }
+
+  QVector<qint64> userIds{game->playerOne.identity.userId};
+  if (game->playerTwo) {
+    userIds.append(game->playerTwo->identity.userId);
+  }
+
+  return userIds;
+}
+
 GameManager::ActionResult GameManager::makeError(const QString& code,
                                                  const QString& message) {
   return {
@@ -214,6 +208,44 @@ GameManager::ActionResult GameManager::makeError(const QString& code,
       .errorMessage = message,
       .payload = {},
   };
+}
+
+void GameManager::attachSecondPlayer(GameState& game,
+                                     const PlayerIdentity& player) {
+  game.playerTwo = PlayerState{
+      .identity = player,
+      .board = GameBoard{},
+      .fleetReady = false,
+  };
+  game.status = Status::WaitingForSetup;
+}
+
+void GameManager::updateStatusAfterPlacement(GameState& game) {
+  if (game.playerTwo && game.playerOne.fleetReady && game.playerTwo->fleetReady) {
+    game.status = Status::Active;
+    game.turnUserId = game.playerOne.identity.userId;
+    return;
+  }
+
+  if (game.playerTwo) {
+    game.status = Status::WaitingForSetup;
+  }
+}
+
+bool GameManager::finalizeGame(GameState& game, const PlayerState& attacker,
+                               const PlayerState& defender,
+                               QJsonObject& resultPayload, QString& error) {
+  game.status = Status::Finished;
+  game.winnerUserId = attacker.identity.userId;
+
+  if (!DatabaseManager::instance().recordGameResult(attacker.identity.userId,
+                                                    defender.identity.userId,
+                                                    error)) {
+    return false;
+  }
+
+  resultPayload.insert(QStringLiteral("winner"), attacker.identity.username);
+  return true;
 }
 
 QJsonObject GameManager::makeGamePayload(const GameState& game,
@@ -247,6 +279,23 @@ QJsonObject GameManager::playerJson(const PlayerState& player,
       {QStringLiteral("fleetReady"), player.fleetReady},
       {QStringLiteral("shipsRemaining"), player.board.shipsRemaining()},
       {QStringLiteral("board"), player.board.toJsonRows(revealShips)},
+  };
+}
+
+QJsonObject GameManager::winnerJson(const PlayerState& winner) {
+  return {
+      {QStringLiteral("userId"), static_cast<qint64>(winner.identity.userId)},
+      {QStringLiteral("username"), winner.identity.username},
+  };
+}
+
+QJsonObject GameManager::fireResultJson(int x, int y,
+                                        const GameBoard::FireResult& result) {
+  return {
+      {QStringLiteral("x"), x},
+      {QStringLiteral("y"), y},
+      {QStringLiteral("hit"), result.hit},
+      {QStringLiteral("sunk"), result.sunk},
   };
 }
 
@@ -362,15 +411,8 @@ QJsonObject GameManager::gameJsonForPlayer(const GameState& game,
 
   if (game.status == Status::Finished) {
     const PlayerState* winner = findPlayer(game, game.winnerUserId);
-    object.insert(
-        QStringLiteral("winner"),
-        winner == nullptr
-            ? QJsonObject{}
-            : QJsonObject{
-                  {QStringLiteral("userId"),
-                   static_cast<qint64>(winner->identity.userId)},
-                  {QStringLiteral("username"), winner->identity.username},
-              });
+    object.insert(QStringLiteral("winner"),
+                  winner == nullptr ? QJsonObject{} : winnerJson(*winner));
   }
 
   return object;

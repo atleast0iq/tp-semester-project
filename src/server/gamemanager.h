@@ -30,6 +30,7 @@ class GameManager final {
   ActionResult gameState(const QString& gameId, qint64 userId) const;
   ActionResult fire(const QString& gameId, qint64 userId, int x, int y);
   QString currentGameForUser(qint64 userId) const;
+  QVector<qint64> participantUserIds(const QString& gameId) const;
 
  private:
   enum class Status {
@@ -56,10 +57,20 @@ class GameManager final {
 
   static ActionResult makeSuccess(const QJsonObject& payload);
   static ActionResult makeError(const QString& code, const QString& message);
+  static ActionResult gameNotFoundError();
+  static ActionResult playerNotInGameError();
   static QString statusToString(Status status);
   static QJsonObject playerJson(const PlayerState& player, bool revealShips);
+  static QJsonObject winnerJson(const PlayerState& winner);
+  static QJsonObject fireResultJson(int x, int y,
+                                    const GameBoard::FireResult& result);
 
   bool ensureUserCanStartAnotherGame(qint64 userId);
+  void attachSecondPlayer(GameState& game, const PlayerIdentity& player);
+  void updateStatusAfterPlacement(GameState& game);
+  bool finalizeGame(GameState& game, const PlayerState& attacker,
+                    const PlayerState& defender, QJsonObject& resultPayload,
+                    QString& error);
   QJsonObject makeGamePayload(const GameState& game, qint64 viewerUserId) const;
   GameState* findGame(const QString& gameId);
   const GameState* findGame(const QString& gameId) const;

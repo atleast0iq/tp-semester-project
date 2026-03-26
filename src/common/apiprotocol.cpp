@@ -7,44 +7,70 @@
 #include <cmath>
 #include <limits>
 
+#include "fleetutils.h"
+
 namespace protocol {
 namespace {
 
-bool inBounds(int x, int y) {
-  return x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize;
+constexpr int kRandomPlacementAttempts = 2048;
+constexpr auto kOrientationHorizontal = "horizontal";
+constexpr auto kOrientationVertical = "vertical";
+
+QString orientationString(bool horizontal) {
+  return horizontal ? QString::fromLatin1(kOrientationHorizontal)
+                    : QString::fromLatin1(kOrientationVertical);
 }
 
-bool canPlaceShip(const QVector<QVector<bool>>& occupied, int x, int y,
-                  int length, bool horizontal) {
-  for (int index = 0; index < length; ++index) {
-    const int currentX = x + (horizontal ? index : 0);
-    const int currentY = y + (horizontal ? 0 : index);
+QJsonObject shipPlacementJson(const ShipPlacement& placement) {
+  return {
+      {QStringLiteral("x"), placement.x},
+      {QStringLiteral("y"), placement.y},
+      {QStringLiteral("length"), placement.length},
+      {QStringLiteral("orientation"), orientationString(placement.horizontal)},
+  };
+}
 
-    if (!inBounds(currentX, currentY)) {
-      return false;
-    }
-
-    for (int offsetY = -1; offsetY <= 1; ++offsetY) {
-      for (int offsetX = -1; offsetX <= 1; ++offsetX) {
-        const int neighborX = currentX + offsetX;
-        const int neighborY = currentY + offsetY;
-        if (inBounds(neighborX, neighborY) && occupied[neighborY][neighborX]) {
-          return false;
-        }
-      }
-    }
+bool parseShipPlacement(const QJsonObject& object, ShipPlacement& placement,
+                        QString& error) {
+  const QString orientation = object.value(QStringLiteral("orientation"))
+                                  .toString()
+                                  .trimmed()
+                                  .toLower();
+  if ((orientation != QString::fromLatin1(kOrientationHorizontal) &&
+       orientation != QString::fromLatin1(kOrientationVertical)) ||
+      !jsonValueToInt(object.value(QStringLiteral("x")), placement.x) ||
+      !jsonValueToInt(object.value(QStringLiteral("y")), placement.y) ||
+      !jsonValueToInt(object.value(QStringLiteral("length")), placement.length)) {
+    error = QStringLiteral(
+        "Ship placement must contain integer x/y/length and a valid "
+        "orientation.");
+    return false;
   }
 
+  placement.horizontal = orientation == QString::fromLatin1(kOrientationHorizontal);
   return true;
 }
 
-void markShip(QVector<QVector<bool>>& occupied, int x, int y, int length,
-              bool horizontal) {
-  for (int index = 0; index < length; ++index) {
-    const int currentX = x + (horizontal ? index : 0);
-    const int currentY = y + (horizontal ? 0 : index);
-    occupied[currentY][currentX] = true;
+bool tryPlaceRandomShip(int length, fleet::OccupancyGrid& occupied,
+                        ShipPlacement& placement) {
+  for (int attempt = 0; attempt < kRandomPlacementAttempts; ++attempt) {
+    placement = ShipPlacement{
+        .x = QRandomGenerator::global()->bounded(kBoardSize),
+        .y = QRandomGenerator::global()->bounded(kBoardSize),
+        .length = length,
+        .horizontal = QRandomGenerator::global()->bounded(2) == 0,
+    };
+    const QVector<QPoint> cells = fleet::shipCells(placement);
+    if (fleet::validateShipPlacement(occupied, cells) !=
+        fleet::PlacementError::None) {
+      continue;
+    }
+
+    fleet::occupyShipCells(occupied, cells);
+    return true;
   }
+
+  return false;
 }
 
 }  // namespace
@@ -129,17 +155,24 @@ QJsonObject makeErrorResponse(const QString& requestId, const QString& code,
   };
 }
 
+QJsonObject makeEventMessage(const QString& eventName,
+                             const QJsonObject& payload) {
+  return {
+      {QStringLiteral("type"), QStringLiteral("event")},
+      {QStringLiteral("event"), eventName},
+      {QStringLiteral("payload"), payload},
+  };
+}
+
+bool isEventMessage(const QJsonObject& message) {
+  return message.value(QStringLiteral("type")).toString() ==
+         QStringLiteral("event");
+}
+
 QJsonArray shipPlacementsToJson(const QVector<ShipPlacement>& placements) {
   QJsonArray array;
   for (const ShipPlacement& placement : placements) {
-    array.append(QJsonObject{
-        {QStringLiteral("x"), placement.x},
-        {QStringLiteral("y"), placement.y},
-        {QStringLiteral("length"), placement.length},
-        {QStringLiteral("orientation"), placement.horizontal
-                                            ? QStringLiteral("horizontal")
-                                            : QStringLiteral("vertical")},
-    });
+    array.append(shipPlacementJson(placement));
   }
 
   return array;
@@ -161,32 +194,12 @@ bool shipPlacementsFromJson(const QJsonValue& value,
       return false;
     }
 
-    const QJsonObject object = item.toObject();
-    const QString orientation = object.value(QStringLiteral("orientation"))
-                                    .toString()
-                                    .trimmed()
-                                    .toLower();
-    int x = 0;
-    int y = 0;
-    int length = 0;
-
-    if (!jsonValueToInt(object.value(QStringLiteral("x")), x) ||
-        !jsonValueToInt(object.value(QStringLiteral("y")), y) ||
-        !jsonValueToInt(object.value(QStringLiteral("length")), length) ||
-        (orientation != QStringLiteral("horizontal") &&
-         orientation != QStringLiteral("vertical"))) {
-      error = QStringLiteral(
-          "Ship placement must contain integer x/y/length and a valid "
-          "orientation.");
+    ShipPlacement placement;
+    if (!parseShipPlacement(item.toObject(), placement, error)) {
       return false;
     }
 
-    placements.append(ShipPlacement{
-        .x = x,
-        .y = y,
-        .length = length,
-        .horizontal = orientation == QStringLiteral("horizontal"),
-    });
+    placements.append(placement);
   }
 
   return true;
@@ -194,37 +207,24 @@ bool shipPlacementsFromJson(const QJsonValue& value,
 
 QVector<ShipPlacement> generateRandomFleet() {
   const QVector<int>& fleet = fleetSpecification();
-  QVector<QVector<bool>> occupied(kBoardSize, QVector<bool>(kBoardSize, false));
-  QVector<ShipPlacement> placements;
-  placements.reserve(fleet.size());
+  while (true) {
+    fleet::OccupancyGrid occupied = fleet::createOccupancyGrid();
+    QVector<ShipPlacement> placements;
+    placements.reserve(fleet.size());
 
-  for (const int length : fleet) {
-    bool placed = false;
-    for (int attempt = 0; attempt < 2048 && !placed; ++attempt) {
-      const bool horizontal = QRandomGenerator::global()->bounded(2) == 0;
-      const int x = QRandomGenerator::global()->bounded(kBoardSize);
-      const int y = QRandomGenerator::global()->bounded(kBoardSize);
-
-      if (!canPlaceShip(occupied, x, y, length, horizontal)) {
-        continue;
+    for (const int length : fleet) {
+      ShipPlacement placement;
+      if (!tryPlaceRandomShip(length, occupied, placement)) {
+        placements.clear();
+        break;
       }
 
-      markShip(occupied, x, y, length, horizontal);
-      placements.append(ShipPlacement{
-          .x = x,
-          .y = y,
-          .length = length,
-          .horizontal = horizontal,
-      });
-      placed = true;
+      placements.append(placement);
     }
-
-    if (!placed) {
-      return generateRandomFleet();
+    if (placements.size() == fleet.size()) {
+      return placements;
     }
   }
-
-  return placements;
 }
 
 }  // namespace protocol

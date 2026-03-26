@@ -57,6 +57,39 @@
 }
 ```
 
+Формат серверного push-события:
+
+```json
+{
+  "type": "event",
+  "event": "game_updated",
+  "payload": {
+    "gameId": "5874808b-1e4f-4df4-bf46-9d96a176de36",
+    "reason": "opponent_fired",
+    "message": "Opponent fired (4, 7) and missed. It is your turn.",
+    "game": {}
+  }
+}
+```
+
+Сервер присылает `game_updated` другим подключённым участникам комнаты, когда:
+
+* к игре присоединился соперник
+* соперник закончил расстановку
+* игру уже можно начинать
+* соперник сделал ход
+* партия завершилась
+
+Поле `reason` принимает значения:
+
+* `opponent_joined`
+* `opponent_ready`
+* `game_started`
+* `opponent_fired`
+* `game_finished`
+
+Для событий после выстрела в `payload.result` дополнительно приходят `x`, `y`, `hit`, `sunk`.
+
 ## Поддерживаемые действия
 
 ### `ping`

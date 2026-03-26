@@ -32,6 +32,9 @@ QJsonObject makeSuccessResponse(const QString& requestId,
                                 const QJsonObject& payload = {});
 QJsonObject makeErrorResponse(const QString& requestId, const QString& code,
                               const QString& message);
+QJsonObject makeEventMessage(const QString& eventName,
+                             const QJsonObject& payload = {});
+bool isEventMessage(const QJsonObject& message);
 QJsonArray shipPlacementsToJson(const QVector<ShipPlacement>& placements);
 bool shipPlacementsFromJson(const QJsonValue& value,
                             QVector<ShipPlacement>& placements, QString& error);

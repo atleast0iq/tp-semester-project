@@ -4,6 +4,18 @@
 
 #include "apiprotocol.h"
 
+namespace {
+
+QString timeoutErrorMessage() {
+  return QStringLiteral("Timed out while waiting for server response.");
+}
+
+}  // namespace
+
+ApiClient::ApiClient() {
+  connect(&m_socket, &QTcpSocket::readyRead, this, &ApiClient::onReadyRead);
+}
+
 ApiClient& ApiClient::instance() {
   static ApiClient instance;
   return instance;
@@ -20,6 +32,8 @@ bool ApiClient::connectToServer(const QString& host, quint16 port,
     m_socket.abort();
   }
 
+  m_pendingResponses.clear();
+  m_lastProtocolError.clear();
   m_socket.connectToHost(host, port);
   if (!m_socket.waitForConnected(timeoutMs)) {
     error = m_socket.errorString();
@@ -71,36 +85,104 @@ QString ApiClient::nextRequestId() {
   return QStringLiteral("cli-%1").arg(m_requestCounter);
 }
 
+bool ApiClient::takePendingResponse(const QString& requestId,
+                                    QJsonObject& response) {
+  const auto iterator = m_pendingResponses.find(requestId);
+  if (iterator == m_pendingResponses.end()) {
+    return false;
+  }
+
+  response = iterator.value();
+  m_pendingResponses.erase(iterator);
+  return true;
+}
+
+bool ApiClient::takePendingProtocolError(QString& error) {
+  if (m_lastProtocolError.isEmpty()) {
+    return false;
+  }
+
+  error = m_lastProtocolError;
+  m_lastProtocolError.clear();
+  return true;
+}
+
+QString ApiClient::waitFailureMessage() const {
+  return m_socket.errorString().isEmpty() ? timeoutErrorMessage()
+                                          : m_socket.errorString();
+}
+
 bool ApiClient::waitForResponse(const QString& requestId, int timeoutMs,
                                 QJsonObject& response, QString& error) {
+  if (takePendingResponse(requestId, response)) {
+    return true;
+  }
+
   const QDeadlineTimer deadline(timeoutMs);
 
   while (deadline.remainingTime() > 0) {
-    while (m_socket.canReadLine()) {
-      const protocol::MessageParseResult parseResult =
-          protocol::parseMessageLine(m_socket.readLine());
-      if (!parseResult.ok) {
-        error = parseResult.error;
-        return false;
-      }
+    if (takePendingProtocolError(error)) {
+      return false;
+    }
 
-      const QString receivedRequestId =
-          parseResult.message.value(QStringLiteral("requestId")).toString();
-      if (receivedRequestId == requestId) {
-        response = parseResult.message;
+    if (m_socket.canReadLine()) {
+      onReadyRead();
+      if (takePendingResponse(requestId, response)) {
         return true;
       }
+      continue;
     }
 
     if (!m_socket.waitForReadyRead(deadline.remainingTime())) {
-      error =
-          m_socket.errorString().isEmpty()
-              ? QStringLiteral("Timed out while waiting for server response.")
-              : m_socket.errorString();
+      if (takePendingResponse(requestId, response)) {
+        return true;
+      }
+
+      if (takePendingProtocolError(error)) {
+        return false;
+      }
+
+      error = waitFailureMessage();
       return false;
+    }
+
+    onReadyRead();
+    if (takePendingResponse(requestId, response)) {
+      return true;
     }
   }
 
-  error = QStringLiteral("Timed out while waiting for server response.");
+  error = timeoutErrorMessage();
   return false;
+}
+
+void ApiClient::onReadyRead() {
+  while (m_socket.canReadLine()) {
+    const protocol::MessageParseResult parseResult =
+        protocol::parseMessageLine(m_socket.readLine());
+    if (!parseResult.ok) {
+      m_lastProtocolError = parseResult.error;
+      emit protocolErrorReceived(m_lastProtocolError);
+      continue;
+    }
+
+    handleParsedMessage(parseResult.message);
+  }
+}
+
+void ApiClient::handleParsedMessage(const QJsonObject& message) {
+  if (protocol::isEventMessage(message)) {
+    emit notificationReceived(message);
+    return;
+  }
+
+  const QString requestId = message.value(QStringLiteral("requestId")).toString();
+  if (requestId.isEmpty()) {
+    m_lastProtocolError =
+        QStringLiteral("Received a response without `requestId`.");
+    emit protocolErrorReceived(m_lastProtocolError);
+    return;
+  }
+
+  m_pendingResponses.insert(requestId, message);
 }

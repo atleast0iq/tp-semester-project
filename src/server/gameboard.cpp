@@ -3,21 +3,7 @@
 #include <algorithm>
 #include <utility>
 
-namespace {
-
-bool sameFleetLayout(const QVector<protocol::ShipPlacement>& placements) {
-  QVector<int> actual;
-  for (const protocol::ShipPlacement& placement : placements) {
-    actual.append(placement.length);
-  }
-
-  QVector<int> expected = protocol::fleetSpecification();
-  std::sort(actual.begin(), actual.end());
-  std::sort(expected.begin(), expected.end());
-  return expected == actual;
-}
-
-}  // namespace
+#include "fleetutils.h"
 
 GameBoard::GameBoard() { reset(); }
 
@@ -28,51 +14,31 @@ bool GameBoard::placeFleet(const QVector<protocol::ShipPlacement>& placements,
     return false;
   }
 
-  if (!sameFleetLayout(placements)) {
+  if (!protocol::fleet::matchesFleetSpecification(placements)) {
     error = QStringLiteral(
         "Fleet must match the classic battleship setup 4,3,3,2,2,2,1,1,1,1.");
     return false;
   }
 
-  QVector<QVector<bool>> occupied(protocol::kBoardSize,
-                                  QVector<bool>(protocol::kBoardSize, false));
+  protocol::fleet::OccupancyGrid occupied = protocol::fleet::createOccupancyGrid();
   QVector<Ship> ships;
   ships.reserve(placements.size());
 
   for (const protocol::ShipPlacement& placement : placements) {
-    Ship ship;
-    ship.cells.reserve(placement.length);
-
-    for (int offset = 0; offset < placement.length; ++offset) {
-      const int x = placement.x + (placement.horizontal ? offset : 0);
-      const int y = placement.y + (placement.horizontal ? 0 : offset);
-
-      if (!inBounds(x, y)) {
+    QVector<QPoint> cells = protocol::fleet::shipCells(placement);
+    switch (protocol::fleet::validateShipPlacement(occupied, cells)) {
+      case protocol::fleet::PlacementError::OutOfBounds:
         error = QStringLiteral("Ship placement goes outside the board.");
         return false;
-      }
-
-      for (int offsetY = -1; offsetY <= 1; ++offsetY) {
-        for (int offsetX = -1; offsetX <= 1; ++offsetX) {
-          const int neighborX = x + offsetX;
-          const int neighborY = y + offsetY;
-
-          if (inBounds(neighborX, neighborY) &&
-              occupied[neighborY][neighborX]) {
-            error =
-                QStringLiteral("Ships must not overlap or touch each other.");
-            return false;
-          }
-        }
-      }
-
-      ship.cells.append(QPoint(x, y));
+      case protocol::fleet::PlacementError::OverlapOrTouch:
+        error = QStringLiteral("Ships must not overlap or touch each other.");
+        return false;
+      case protocol::fleet::PlacementError::None:
+        break;
     }
 
-    ships.append(ship);
-    for (const QPoint& cell : ship.cells) {
-      occupied[cell.y()][cell.x()] = true;
-    }
+    protocol::fleet::occupyShipCells(occupied, cells);
+    ships.append(Ship{.cells = std::move(cells), .hits = 0});
   }
 
   reset();
@@ -161,6 +127,5 @@ void GameBoard::reset() {
 }
 
 bool GameBoard::inBounds(int x, int y) const {
-  return x >= 0 && x < protocol::kBoardSize && y >= 0 &&
-         y < protocol::kBoardSize;
+  return protocol::fleet::inBounds(x, y);
 }
