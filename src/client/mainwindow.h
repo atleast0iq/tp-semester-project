@@ -24,6 +24,7 @@ class MainWindow : public QMainWindow {
   void handleLogin();
   void handleRegister();
   void handleRefresh();
+  void handleCreateGame();
 
 
 

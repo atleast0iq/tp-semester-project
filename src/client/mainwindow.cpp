@@ -41,6 +41,9 @@ void MainWindow::setupConnections()
 
   connect(ui->RefreshButton, &QPushButton::clicked,
           this, &MainWindow::handleRefresh);
+
+  connect(ui->CreateGameButton, &QPushButton::clicked,
+          this, &MainWindow::handleCreateGame);
 }
 
 void MainWindow::handleConnect()
@@ -198,6 +201,47 @@ void MainWindow::handleRefresh()
 
   populateGamesTable(games);
   ui->statusbar->showMessage("Список игр обновлён");
+}
+
+void MainWindow::handleCreateGame()
+{
+  if (!ensureConnected()) {
+    return;
+  }
+
+  QString error;
+  const QJsonObject response =
+      ApiClient::instance().sendRequest("create_game", {}, 3000, error);
+
+  if (!error.isEmpty()) {
+    showError("Ошибка create_game", error);
+    return;
+  }
+
+  const QString status = response.value("status").toString();
+  if (status != "ok") {
+    const QJsonObject errorObj = response.value("error").toObject();
+    const QString message =
+        errorObj.value("message").toString("create_game failed");
+    QMessageBox::warning(this, "Ошибка", message);
+    ui->statusbar->showMessage("Не удалось создать игру");
+    qDebug() << "create_game failed:" << response;
+    return;
+  }
+
+  const QJsonObject payload = response.value("payload").toObject();
+  const QString gameId = payload.value("gameId").toString();
+
+  ui->statusbar->showMessage(
+      QString("Игра создана: %1").arg(gameId.isEmpty() ? "без ID" : gameId));
+  QMessageBox::information(
+      this, "Успех",
+      gameId.isEmpty()
+          ? "Игра успешно создана"
+          : QString("Игра успешно создана.\nID: %1").arg(gameId));
+  qDebug() << "create_game successful:" << response;
+
+  handleRefresh();
 }
 
 bool MainWindow::ensureConnected()
