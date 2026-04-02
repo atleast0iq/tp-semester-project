@@ -1,0 +1,274 @@
+\chapter{Battleship TCP API }
+\hypertarget{md_docs_2api}{}\label{md_docs_2api}\index{Battleship TCP API@{Battleship TCP API}}
+\label{md_docs_2api_autotoc_md0}%
+\Hypertarget{md_docs_2api_autotoc_md0}%
+\hypertarget{md_docs_2api_autotoc_md1}{}\doxysection{\texorpdfstring{Архитектура}{Архитектура}}\label{md_docs_2api_autotoc_md1}
+Проект разделён на три слоя:\+
+
+
+\begin{DoxyEnumerate}
+\item {\ttfamily src/\+common} Здесь лежит общий line-\/delimited JSON протокол, сериализация сообщений и описание флота.
+\item {\ttfamily src/\+server} {\ttfamily \doxylink{class_server_application}{Server\+Application}} принимает TCP-\/соединения и роутит команды. {\ttfamily \doxylink{class_game_manager}{Game\+Manager}} управляет комнатами, очередностью ходов и правилами партии. {\ttfamily \doxylink{class_game_board}{Game\+Board}} валидирует расстановку кораблей и обрабатывает выстрелы. {\ttfamily \doxylink{class_database_manager}{Database\+Manager}} реализован как singleton над SQLite и хранит пользователей и статистику.
+\item {\ttfamily src/\+client} {\ttfamily \doxylink{class_api_client}{Api\+Client}} реализован как singleton и поддерживает одно TCP-\/соединение к серверу. {\ttfamily \doxylink{class_command_line_client}{Command\+Line\+Client}} даёт REPL и одноразовые команды для тестирования API без GUI.
+\end{DoxyEnumerate}\hypertarget{md_docs_2api_autotoc_md2}{}\doxysection{\texorpdfstring{Транспорт}{Транспорт}}\label{md_docs_2api_autotoc_md2}
+
+\begin{DoxyItemize}
+\item TCP, UTF-\/8
+\item одно JSON-\/сообщение на строку
+\item авторизация привязана к TCP-\/соединению
+\end{DoxyItemize}
+
+Формат запроса:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}requestId"{}:\ "{}cli-\/1"{},}
+\DoxyCodeLine{\ \ "{}action"{}:\ "{}login"{},}
+\DoxyCodeLine{\ \ "{}payload"{}:\ \{}
+\DoxyCodeLine{\ \ \ \ "{}username"{}:\ "{}alice"{},}
+\DoxyCodeLine{\ \ \ \ "{}password"{}:\ "{}secret"{}}
+\DoxyCodeLine{\ \ \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Формат успешного ответа:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}requestId"{}:\ "{}cli-\/1"{},}
+\DoxyCodeLine{\ \ "{}status"{}:\ "{}ok"{},}
+\DoxyCodeLine{\ \ "{}payload"{}:\ \{\}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Формат ошибки:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}requestId"{}:\ "{}cli-\/1"{},}
+\DoxyCodeLine{\ \ "{}status"{}:\ "{}error"{},}
+\DoxyCodeLine{\ \ "{}error"{}:\ \{}
+\DoxyCodeLine{\ \ \ \ "{}code"{}:\ "{}validation\_error"{},}
+\DoxyCodeLine{\ \ \ \ "{}message"{}:\ "{}..."{}}
+\DoxyCodeLine{\ \ \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Формат серверного push-\/события:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}type"{}:\ "{}event"{},}
+\DoxyCodeLine{\ \ "{}event"{}:\ "{}game\_updated"{},}
+\DoxyCodeLine{\ \ "{}payload"{}:\ \{}
+\DoxyCodeLine{\ \ \ \ "{}gameId"{}:\ "{}5874808b-\/1e4f-\/4df4-\/bf46-\/9d96a176de36"{},}
+\DoxyCodeLine{\ \ \ \ "{}reason"{}:\ "{}opponent\_fired"{},}
+\DoxyCodeLine{\ \ \ \ "{}message"{}:\ "{}Opponent\ fired\ (4,\ 7)\ and\ missed.\ It\ is\ your\ turn."{},}
+\DoxyCodeLine{\ \ \ \ "{}game"{}:\ \{\}}
+\DoxyCodeLine{\ \ \}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Сервер присылает {\ttfamily game\+\_\+updated} другим подключённым участникам комнаты, когда:\+
+
+
+\begin{DoxyItemize}
+\item к игре присоединился соперник
+\item соперник закончил расстановку
+\item игру уже можно начинать
+\item соперник сделал ход
+\item партия завершилась
+\end{DoxyItemize}
+
+Поле {\ttfamily reason} принимает значения:\+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily opponent\+\_\+joined}
+\item {\ttfamily opponent\+\_\+ready}
+\item {\ttfamily game\+\_\+started}
+\item {\ttfamily opponent\+\_\+fired}
+\item {\ttfamily game\+\_\+finished}
+\end{DoxyItemize}
+
+Для событий после выстрела в {\ttfamily payload.\+result} дополнительно приходят {\ttfamily x}, {\ttfamily y}, {\ttfamily hit}, {\ttfamily sunk}.\hypertarget{md_docs_2api_autotoc_md3}{}\doxysection{\texorpdfstring{Поддерживаемые действия}{Поддерживаемые действия}}\label{md_docs_2api_autotoc_md3}
+\hypertarget{md_docs_2api_autotoc_md4}{}\doxysubsection{\texorpdfstring{{\ttfamily ping}}{{\ttfamily ping}}}\label{md_docs_2api_autotoc_md4}
+Проверка доступности сервера.
+
+Payload:\+ пустой объект.\hypertarget{md_docs_2api_autotoc_md5}{}\doxysubsection{\texorpdfstring{{\ttfamily register}}{{\ttfamily register}}}\label{md_docs_2api_autotoc_md5}
+Регистрация пользователя и автоматическая авторизация на текущем соединении.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}username"{}:\ "{}alice"{},}
+\DoxyCodeLine{\ \ "{}password"{}:\ "{}secret"{}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_docs_2api_autotoc_md6}{}\doxysubsection{\texorpdfstring{{\ttfamily login}}{{\ttfamily login}}}\label{md_docs_2api_autotoc_md6}
+Авторизация существующего пользователя на текущем соединении.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}username"{}:\ "{}alice"{},}
+\DoxyCodeLine{\ \ "{}password"{}:\ "{}secret"{}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_docs_2api_autotoc_md7}{}\doxysubsection{\texorpdfstring{{\ttfamily logout}}{{\ttfamily logout}}}\label{md_docs_2api_autotoc_md7}
+Сбрасывает авторизацию на текущем соединении.\hypertarget{md_docs_2api_autotoc_md8}{}\doxysubsection{\texorpdfstring{{\ttfamily whoami}}{{\ttfamily whoami}}}\label{md_docs_2api_autotoc_md8}
+Возвращает текущего пользователя, его статистику и {\ttfamily current\+Game\+Id}, если игра выбрана.\hypertarget{md_docs_2api_autotoc_md9}{}\doxysubsection{\texorpdfstring{{\ttfamily stats}}{{\ttfamily stats}}}\label{md_docs_2api_autotoc_md9}
+Показывает статистику.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}username"{}:\ "{}alice"{}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Если {\ttfamily username} не передан, сервер вернёт статистику текущего авторизованного пользователя.\hypertarget{md_docs_2api_autotoc_md10}{}\doxysubsection{\texorpdfstring{{\ttfamily list\+\_\+games}}{{\ttfamily list\+\_\+games}}}\label{md_docs_2api_autotoc_md10}
+Возвращает список игровых комнат.\hypertarget{md_docs_2api_autotoc_md11}{}\doxysubsection{\texorpdfstring{{\ttfamily create\+\_\+game}}{{\ttfamily create\+\_\+game}}}\label{md_docs_2api_autotoc_md11}
+Создаёт новую комнату для текущего пользователя.\hypertarget{md_docs_2api_autotoc_md12}{}\doxysubsection{\texorpdfstring{{\ttfamily join\+\_\+game}}{{\ttfamily join\+\_\+game}}}\label{md_docs_2api_autotoc_md12}
+Подключает второго игрока к комнате.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}gameId"{}:\ "{}5874808b-\/1e4f-\/4df4-\/bf46-\/9d96a176de36"{}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_docs_2api_autotoc_md13}{}\doxysubsection{\texorpdfstring{{\ttfamily place\+\_\+ships}}{{\ttfamily place\+\_\+ships}}}\label{md_docs_2api_autotoc_md13}
+Передаёт расстановку флота для текущего игрока.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}gameId"{}:\ "{}5874808b-\/1e4f-\/4df4-\/bf46-\/9d96a176de36"{},}
+\DoxyCodeLine{\ \ "{}ships"{}:\ [}
+\DoxyCodeLine{\ \ \ \ \{\ "{}x"{}:\ 0,\ "{}y"{}:\ 0,\ "{}length"{}:\ 4,\ "{}orientation"{}:\ "{}vertical"{}\ \},}
+\DoxyCodeLine{\ \ \ \ \{\ "{}x"{}:\ 2,\ "{}y"{}:\ 0,\ "{}length"{}:\ 3,\ "{}orientation"{}:\ "{}vertical"{}\ \}}
+\DoxyCodeLine{\ \ ]}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Полный флот должен соответствовать классической схеме:\+ {\ttfamily 4, 3, 3, 2, 2, 2, 1, 1, 1, 1}
+
+Корабли не должны пересекаться и касаться друг друга.\hypertarget{md_docs_2api_autotoc_md14}{}\doxysubsection{\texorpdfstring{{\ttfamily place\+\_\+random\+\_\+ships}}{{\ttfamily place\+\_\+random\+\_\+ships}}}\label{md_docs_2api_autotoc_md14}
+Серверная вспомогательная команда для случайной расстановки.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}gameId"{}:\ "{}5874808b-\/1e4f-\/4df4-\/bf46-\/9d96a176de36"{}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+\hypertarget{md_docs_2api_autotoc_md15}{}\doxysubsection{\texorpdfstring{{\ttfamily game\+\_\+state}}{{\ttfamily game\+\_\+state}}}\label{md_docs_2api_autotoc_md15}
+Возвращает состояние игры для текущего игрока.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}gameId"{}:\ "{}5874808b-\/1e4f-\/4df4-\/bf46-\/9d96a176de36"{}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Если {\ttfamily game\+Id} не передан, сервер пробует использовать текущую выбранную игру.
+
+Символы доски:\+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily .} — неизвестная или пустая клетка
+\item {\ttfamily S} — собственный корабль
+\item {\ttfamily o} — промах
+\item {\ttfamily X} — попадание
+\end{DoxyItemize}\hypertarget{md_docs_2api_autotoc_md16}{}\doxysubsection{\texorpdfstring{{\ttfamily fire}}{{\ttfamily fire}}}\label{md_docs_2api_autotoc_md16}
+Выстрел по координатам противника.
+
+Payload:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ "{}gameId"{}:\ "{}5874808b-\/1e4f-\/4df4-\/bf46-\/9d96a176de36"{},}
+\DoxyCodeLine{\ \ "{}x"{}:\ 4,}
+\DoxyCodeLine{\ \ "{}y"{}:\ 7}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+При промахе ход переходит сопернику. При потоплении всех кораблей сервер обновляет статистику обоих игроков в SQLite.\hypertarget{md_docs_2api_autotoc_md17}{}\doxysection{\texorpdfstring{Тестовый CLI}{Тестовый CLI}}\label{md_docs_2api_autotoc_md17}
+Клиент поддерживает:\+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily register \texorpdfstring{$<$}{<}username\texorpdfstring{$>$}{>} \texorpdfstring{$<$}{<}password\texorpdfstring{$>$}{>}}
+\item {\ttfamily login \texorpdfstring{$<$}{<}username\texorpdfstring{$>$}{>} \texorpdfstring{$<$}{<}password\texorpdfstring{$>$}{>}}
+\item {\ttfamily logout}
+\item {\ttfamily whoami}
+\item {\ttfamily stats \+[username]\+}
+\item {\ttfamily list-\/games}
+\item {\ttfamily create-\/game}
+\item {\ttfamily join-\/game \texorpdfstring{$<$}{<}game\+Id\texorpdfstring{$>$}{>}}
+\item {\ttfamily place-\/random \+[game\+Id]\+}
+\item {\ttfamily state \+[game\+Id]\+}
+\item {\ttfamily fire \texorpdfstring{$<$}{<}x\texorpdfstring{$>$}{>} \texorpdfstring{$<$}{<}y\texorpdfstring{$>$}{>} \+[game\+Id]\+}
+\item {\ttfamily ping}
+\end{DoxyItemize}
+
+Пример интерактивной сессии:\+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./build/clang-\/client-\/debug/battleship\_client\ -\/-\/host\ 127.0.0.1\ -\/-\/port\ 6767}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{register\ alice\ secret}
+\DoxyCodeLine{create-\/game}
+\DoxyCodeLine{place-\/random}
+\DoxyCodeLine{state}
+
+\end{DoxyCode}
+ 

@@ -1,0 +1,93 @@
+\doxysection{gamemanager.\+h}
+\hypertarget{gamemanager_8h_source}{}\label{gamemanager_8h_source}\index{src/server/gamemanager.h@{src/server/gamemanager.h}}
+\doxymbox{\hyperlink{gamemanager_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QHash>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QJsonObject>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <optional>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{apiprotocol_8h}{apiprotocol.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{gameboard_8h}{gameboard.h}}"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_game_manager}{GameManager}}\ final\ \{}
+\DoxyCodeLine{00012\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{PlayerIdentity}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ qint64\ \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity_a702a49d59a80bd56ab7181548008b01a}{userId}}\ =\ 0;}
+\DoxyCodeLine{00015\ \ \ \ \ QString\ \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity_aeea01dd0c8afced08bc60647ecebd5fd}{username}};}
+\DoxyCodeLine{00016\ \ \ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result_af0d10dfd3f795fe516082e88e70f5e7c}{ok}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00020\ \ \ \ \ QString\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result_a7a174572e83f5dfc038ddfb764fdffcc}{errorCode}};}
+\DoxyCodeLine{00021\ \ \ \ \ QString\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result_acb703ee0875fb3073405618957b5aaf9}{errorMessage}};}
+\DoxyCodeLine{00022\ \ \ \ \ QJsonObject\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result_a1e08268a1c38edaa0b8bc24308fcb3ec}{payload}};}
+\DoxyCodeLine{00023\ \ \ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \doxymbox{\hyperlink{class_game_manager_a3d55970af8d3de80658e47052371bb1d}{createGame}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{PlayerIdentity}}\&\ player);}
+\DoxyCodeLine{00026\ \ \ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \doxymbox{\hyperlink{class_game_manager_a04f0f93f86f1ec6be58244bb6764eb72}{listGames}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \ \ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \doxymbox{\hyperlink{class_game_manager_ad8c3aa478888cbccf6dab7196a36da95}{joinGame}}(\textcolor{keyword}{const}\ QString\&\ gameId,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{PlayerIdentity}}\&\ player);}
+\DoxyCodeLine{00028\ \ \ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \doxymbox{\hyperlink{class_game_manager_a1e59a296650d8330b475452c595a527d}{placeShips}}(\textcolor{keyword}{const}\ QString\&\ gameId,\ qint64\ userId,}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QVector<protocol::ShipPlacement>\&\ placements);}
+\DoxyCodeLine{00030\ \ \ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \doxymbox{\hyperlink{class_game_manager_abc57b9609703e3390892f06b5bf06acb}{gameState}}(\textcolor{keyword}{const}\ QString\&\ gameId,\ qint64\ userId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00031\ \ \ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ \doxymbox{\hyperlink{class_game_manager_ac98ce5b9c4a6db31d9b142ca33aaec5f}{fire}}(\textcolor{keyword}{const}\ QString\&\ gameId,\ qint64\ userId,\ \textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{00032\ \ \ QString\ \doxymbox{\hyperlink{class_game_manager_aee963cda8a76fe107dabe59db4e2751a}{currentGameForUser}}(qint64\ userId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ QVector<qint64>\ \doxymbox{\hyperlink{class_game_manager_af4f5982d280593ddf73d53bbf7440a8a}{participantUserIds}}(\textcolor{keyword}{const}\ QString\&\ gameId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{enum\ class}\ Status\ \{}
+\DoxyCodeLine{00037\ \ \ \ \ WaitingForOpponent,}
+\DoxyCodeLine{00038\ \ \ \ \ WaitingForSetup,}
+\DoxyCodeLine{00039\ \ \ \ \ Active,}
+\DoxyCodeLine{00040\ \ \ \ \ Finished,}
+\DoxyCodeLine{00041\ \ \ \};}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \textcolor{keyword}{struct\ }PlayerState\ \{}
+\DoxyCodeLine{00044\ \ \ \ \ PlayerIdentity\ identity;}
+\DoxyCodeLine{00045\ \ \ \ \ \doxymbox{\hyperlink{class_game_board}{GameBoard}}\ board;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{bool}\ fleetReady\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00047\ \ \ \};}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \ \ \textcolor{keyword}{struct\ }GameState\ \{}
+\DoxyCodeLine{00050\ \ \ \ \ QString\ id;}
+\DoxyCodeLine{00051\ \ \ \ \ Status\ status\ =\ Status::WaitingForOpponent;}
+\DoxyCodeLine{00052\ \ \ \ \ PlayerState\ playerOne;}
+\DoxyCodeLine{00053\ \ \ \ \ std::optional<PlayerState>\ playerTwo;}
+\DoxyCodeLine{00054\ \ \ \ \ qint64\ turnUserId\ =\ 0;}
+\DoxyCodeLine{00055\ \ \ \ \ qint64\ winnerUserId\ =\ 0;}
+\DoxyCodeLine{00056\ \ \ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \textcolor{keyword}{static}\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ makeSuccess(\textcolor{keyword}{const}\ QJsonObject\&\ payload);}
+\DoxyCodeLine{00059\ \ \ \textcolor{keyword}{static}\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ makeError(\textcolor{keyword}{const}\ QString\&\ code,\ \textcolor{keyword}{const}\ QString\&\ message);}
+\DoxyCodeLine{00060\ \ \ \textcolor{keyword}{static}\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ gameNotFoundError();}
+\DoxyCodeLine{00061\ \ \ \textcolor{keyword}{static}\ \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{ActionResult}}\ playerNotInGameError();}
+\DoxyCodeLine{00062\ \ \ \textcolor{keyword}{static}\ QString\ statusToString(Status\ status);}
+\DoxyCodeLine{00063\ \ \ \textcolor{keyword}{static}\ QJsonObject\ playerJson(\textcolor{keyword}{const}\ PlayerState\&\ player,\ \textcolor{keywordtype}{bool}\ revealShips);}
+\DoxyCodeLine{00064\ \ \ \textcolor{keyword}{static}\ QJsonObject\ winnerJson(\textcolor{keyword}{const}\ PlayerState\&\ winner);}
+\DoxyCodeLine{00065\ \ \ \textcolor{keyword}{static}\ QJsonObject\ fireResultJson(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ GameBoard::FireResult\&\ result);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \ \ \textcolor{keywordtype}{bool}\ ensureUserCanStartAnotherGame(qint64\ userId);}
+\DoxyCodeLine{00069\ \ \ \textcolor{keywordtype}{void}\ attachSecondPlayer(GameState\&\ game,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{PlayerIdentity}}\&\ player);}
+\DoxyCodeLine{00070\ \ \ \textcolor{keywordtype}{void}\ updateStatusAfterPlacement(GameState\&\ game);}
+\DoxyCodeLine{00071\ \ \ \textcolor{keywordtype}{bool}\ finalizeGame(GameState\&\ game,\ \textcolor{keyword}{const}\ PlayerState\&\ attacker,}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ PlayerState\&\ defender,\ QJsonObject\&\ resultPayload,}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\&\ error);}
+\DoxyCodeLine{00074\ \ \ QJsonObject\ makeGamePayload(\textcolor{keyword}{const}\ GameState\&\ game,\ qint64\ viewerUserId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00075\ \ \ GameState*\ findGame(\textcolor{keyword}{const}\ QString\&\ gameId);}
+\DoxyCodeLine{00076\ \ \ \textcolor{keyword}{const}\ GameState*\ findGame(\textcolor{keyword}{const}\ QString\&\ gameId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00077\ \ \ PlayerState*\ findPlayer(GameState\&\ game,\ qint64\ userId);}
+\DoxyCodeLine{00078\ \ \ \textcolor{keyword}{const}\ PlayerState*\ findPlayer(\textcolor{keyword}{const}\ GameState\&\ game,\ qint64\ userId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00079\ \ \ PlayerState*\ findOpponent(GameState\&\ game,\ qint64\ userId);}
+\DoxyCodeLine{00080\ \ \ \textcolor{keyword}{const}\ PlayerState*\ findOpponent(\textcolor{keyword}{const}\ GameState\&\ game,\ qint64\ userId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00081\ \ \ QJsonObject\ lobbyJson(\textcolor{keyword}{const}\ GameState\&\ game)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00082\ \ \ QJsonObject\ gameJsonForPlayer(\textcolor{keyword}{const}\ GameState\&\ game,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ qint64\ viewerUserId)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ QHash<QString,\ GameState>\ m\_games;}
+\DoxyCodeLine{00086\ \ \ QHash<qint64,\ QString>\ m\_userToGame;}
+\DoxyCodeLine{00087\ \};}
+
+\end{DoxyCode}

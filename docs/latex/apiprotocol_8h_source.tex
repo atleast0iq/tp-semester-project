@@ -1,0 +1,49 @@
+\doxysection{apiprotocol.\+h}
+\hypertarget{apiprotocol_8h_source}{}\label{apiprotocol_8h_source}\index{src/common/apiprotocol.h@{src/common/apiprotocol.h}}
+\doxymbox{\hyperlink{apiprotocol_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QByteArray>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QJsonArray>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QJsonObject>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QJsonValue>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <QVector>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{namespace\ }\doxymbox{\hyperlink{namespaceprotocol}{protocol}}\ \{}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{namespaceprotocol_af9ff5a713b3f5db507073645c4725c38}{kBoardSize}}\ =\ 10;}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{ShipPlacement}}\ \{}
+\DoxyCodeLine{00015\ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement_a5d11f298e974b6d4d5817731054d0354}{x}}\ =\ 0;}
+\DoxyCodeLine{00016\ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement_a3e5a7e55bd60e01ec58ae48ba1e01c96}{y}}\ =\ 0;}
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement_ae712f15d77acf2cf1e0fd4a7de732198}{length}}\ =\ 0;}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement_aacb443faf449a6e8ec715c5700721ef2}{horizontal}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{MessageParseResult}}\ \{}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{structprotocol_1_1_message_parse_result_a00265c3e4a0e8bed026d93b37467eeaa}{ok}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00023\ \ \ QJsonObject\ \doxymbox{\hyperlink{structprotocol_1_1_message_parse_result_a3cf5912728e0932a2654d2b74d0eb80d}{message}};}
+\DoxyCodeLine{00024\ \ \ QString\ \doxymbox{\hyperlink{structprotocol_1_1_message_parse_result_ac22f122fe1b5582de92bc639674c6b55}{error}};}
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{const}\ QVector<int>\&\ \doxymbox{\hyperlink{namespaceprotocol_a0fd1b187095a4ad00fa7041c88bc9d89}{fleetSpecification}}();}
+\DoxyCodeLine{00028\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{namespaceprotocol_a2c43902df9ffe603edd57b2340c1b449}{jsonValueToInt}}(\textcolor{keyword}{const}\ QJsonValue\&\ value,\ \textcolor{keywordtype}{int}\&\ result);}
+\DoxyCodeLine{00029\ QByteArray\ \doxymbox{\hyperlink{namespaceprotocol_a86c54eb7dd880e437670146ced9752ab}{serializeLine}}(\textcolor{keyword}{const}\ QJsonObject\&\ message);}
+\DoxyCodeLine{00030\ \doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{MessageParseResult}}\ \doxymbox{\hyperlink{namespaceprotocol_a41a88d0dd04f8f49fc4455344935a2ad}{parseMessageLine}}(QByteArray\ line);}
+\DoxyCodeLine{00031\ QJsonObject\ \doxymbox{\hyperlink{namespaceprotocol_a2b962212c5797d57875f5c0eb162fb8b}{makeSuccessResponse}}(\textcolor{keyword}{const}\ QString\&\ requestId,}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QJsonObject\&\ payload\ =\ \{\});}
+\DoxyCodeLine{00033\ QJsonObject\ \doxymbox{\hyperlink{namespaceprotocol_a8d070558139df1c97efd8fd86d88ad8c}{makeErrorResponse}}(\textcolor{keyword}{const}\ QString\&\ requestId,\ \textcolor{keyword}{const}\ QString\&\ code,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QString\&\ message);}
+\DoxyCodeLine{00035\ QJsonObject\ \doxymbox{\hyperlink{namespaceprotocol_a7b872f974bd0ca5ca01f07698adab0aa}{makeEventMessage}}(\textcolor{keyword}{const}\ QString\&\ eventName,}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QJsonObject\&\ payload\ =\ \{\});}
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{namespaceprotocol_a978b421d0a7e2854a9afe695ce0cfb47}{isEventMessage}}(\textcolor{keyword}{const}\ QJsonObject\&\ message);}
+\DoxyCodeLine{00038\ QJsonArray\ \doxymbox{\hyperlink{namespaceprotocol_af208909d93907ea89036f5142218c799}{shipPlacementsToJson}}(\textcolor{keyword}{const}\ QVector<ShipPlacement>\&\ placements);}
+\DoxyCodeLine{00039\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{namespaceprotocol_a1b5f36e3cd80d66821e0f7e3b65c8749}{shipPlacementsFromJson}}(\textcolor{keyword}{const}\ QJsonValue\&\ value,}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QVector<ShipPlacement>\&\ placements,\ QString\&\ error);}
+\DoxyCodeLine{00041\ QVector<ShipPlacement>\ \doxymbox{\hyperlink{namespaceprotocol_adaccbd44f7aa8166192e14bf9e2ba627}{generateRandomFleet}}();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \}\ \ \textcolor{comment}{//\ namespace\ protocol}}
+
+\end{DoxyCode}

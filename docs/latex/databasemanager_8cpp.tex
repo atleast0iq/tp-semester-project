@@ -1,0 +1,48 @@
+\doxysection{src/\+server/\+databasemanager.cpp File Reference}
+\hypertarget{databasemanager_8cpp}{}\label{databasemanager_8cpp}\index{src/server/databasemanager.cpp@{src/server/databasemanager.cpp}}
+{\ttfamily \+\#include "{}databasemanager.\+h"{}}\newline
+{\ttfamily \+\#include $<$algorithm$>$}\newline
+{\ttfamily \+\#include $<$QCore\+Application$>$}\newline
+{\ttfamily \+\#include $<$QCryptographic\+Hash$>$}\newline
+{\ttfamily \+\#include $<$QDir$>$}\newline
+{\ttfamily \+\#include $<$QFile$>$}\newline
+{\ttfamily \+\#include $<$QFile\+Info$>$}\newline
+{\ttfamily \+\#include $<$QRegular\+Expression$>$}\newline
+{\ttfamily \+\#include $<$QScope\+Guard$>$}\newline
+{\ttfamily \+\#include $<$QSql\+Database$>$}\newline
+{\ttfamily \+\#include $<$QSql\+Error$>$}\newline
+{\ttfamily \+\#include $<$QSql\+Query$>$}\newline
+{\ttfamily \+\#include $<$Qt\+Network/\+qpassworddigestor.\+h$>$}\newline
+{\ttfamily \+\#include $<$QUuid$>$}\newline
+{\ttfamily \+\#include $<$QVariant$>$}\newline
+Include dependency graph for databasemanager.\+cpp:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{databasemanager_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+QJson\+Object \doxymbox{\hyperlink{databasemanager_8cpp_a3bb2bcde6b8729e98edddf2af5b003be}{to\+Json}} (const \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{Database\+Manager::\+\+User\+Info}} \&user)
+\item 
+QJson\+Object \doxymbox{\hyperlink{databasemanager_8cpp_a670ccc545fcbb45adc11b6a577792454}{to\+Json}} (const \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{Database\+Manager::\+\+User\+Stats}} \&stats)
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{databasemanager_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{databasemanager_8cpp_a3bb2bcde6b8729e98edddf2af5b003be}\index{databasemanager.cpp@{databasemanager.cpp}!toJson@{toJson}}
+\index{toJson@{toJson}!databasemanager.cpp@{databasemanager.cpp}}
+\doxysubsubsection{\texorpdfstring{toJson()}{toJson()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{databasemanager_8cpp_a3bb2bcde6b8729e98edddf2af5b003be} 
+QJson\+Object to\+Json (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{Database\+Manager::\+\+User\+Info}} \&}]{user}{}\end{DoxyParamCaption})}
+
+\Hypertarget{databasemanager_8cpp_a670ccc545fcbb45adc11b6a577792454}\index{databasemanager.cpp@{databasemanager.cpp}!toJson@{toJson}}
+\index{toJson@{toJson}!databasemanager.cpp@{databasemanager.cpp}}
+\doxysubsubsection{\texorpdfstring{toJson()}{toJson()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{databasemanager_8cpp_a670ccc545fcbb45adc11b6a577792454} 
+QJson\+Object to\+Json (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{Database\+Manager::\+\+User\+Stats}} \&}]{stats}{}\end{DoxyParamCaption})}
+

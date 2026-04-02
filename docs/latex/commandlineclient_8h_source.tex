@@ -1,0 +1,44 @@
+\doxysection{commandlineclient.\+h}
+\hypertarget{commandlineclient_8h_source}{}\label{commandlineclient_8h_source}\index{src/client/commandlineclient.h@{src/client/commandlineclient.h}}
+\doxymbox{\hyperlink{commandlineclient_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QJsonObject>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QObject>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QStringList>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }QSocketNotifier;}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_command_line_client_a2fbf3af89a7f3b93c79ec07ab7a7f4d0}{CommandLineClient}}\ final\ :\ \textcolor{keyword}{public}\ QObject\ \{}
+\DoxyCodeLine{00011\ \ \ Q\_OBJECT}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{explicit}\ \doxymbox{\hyperlink{class_command_line_client_a2fbf3af89a7f3b93c79ec07ab7a7f4d0}{CommandLineClient}}(QString\ host,\ quint16\ port,\ \textcolor{keywordtype}{int}\ timeoutMs,}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QObject*\ parent\ =\ \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_command_line_client_a45f8a8befe876e99d5489dd040a56bfd}{runCommand}}(\textcolor{keyword}{const}\ QStringList\&\ positionalArguments);}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_command_line_client_aababd456547a491d069ad419b5922f97}{startInteractive}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \textcolor{keywordtype}{bool}\ connect(QString\&\ error)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00022\ \ \ \textcolor{keywordtype}{bool}\ executeCommand(\textcolor{keyword}{const}\ QStringList\&\ tokens,\ \textcolor{keywordtype}{bool}\ interactiveMode);}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{void}\ printPrompt()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{void}\ printHelp()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{void}\ printResponse(\textcolor{keyword}{const}\ QJsonObject\&\ response)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{void}\ printNotification(\textcolor{keyword}{const}\ QJsonObject\&\ notification)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \textcolor{keyword}{private}\ slots:}
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{void}\ onStdinActivated();}
+\DoxyCodeLine{00030\ \ \ \textcolor{keywordtype}{void}\ onNotificationReceived(\textcolor{keyword}{const}\ QJsonObject\&\ notification);}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{void}\ onProtocolErrorReceived(\textcolor{keyword}{const}\ QString\&\ error);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ \ \ QString\ m\_host;}
+\DoxyCodeLine{00035\ \ \ quint16\ m\_port\ =\ 0;}
+\DoxyCodeLine{00036\ \ \ \textcolor{keywordtype}{int}\ m\_timeoutMs\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ QSocketNotifier*\ m\_stdinNotifier\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00038\ \};}
+
+\end{DoxyCode}

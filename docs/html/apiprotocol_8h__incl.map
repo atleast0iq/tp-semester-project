@@ -1,0 +1,15 @@
+<map id="src/common/apiprotocol.h" name="src/common/apiprotocol.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="254,5,425,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,80,95,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,35,110,80,109,75,288,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="118,80,208,107"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="311,32,209,76,207,71,306,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="232,80,329,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="332,31,302,70,299,66,327,34"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="354,80,445,107"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="351,30,382,69,377,67,349,35"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="469,80,535,107"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="368,30,462,73,457,73,367,35"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="558,80,627,107"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="384,30,546,78,541,78,383,35"/>
+</map>

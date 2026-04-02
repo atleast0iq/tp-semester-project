@@ -1,0 +1,33 @@
+\doxysection{src/\+common/\+fleetutils.cpp File Reference}
+\hypertarget{fleetutils_8cpp}{}\label{fleetutils_8cpp}\index{src/common/fleetutils.cpp@{src/common/fleetutils.cpp}}
+{\ttfamily \+\#include "{}fleetutils.\+h"{}}\newline
+{\ttfamily \+\#include $<$algorithm$>$}\newline
+Include dependency graph for fleetutils.\+cpp:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{fleetutils_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \doxymbox{\hyperlink{namespaceprotocol}{protocol}}
+\item 
+namespace \doxymbox{\hyperlink{namespaceprotocol_1_1fleet}{protocol::\+fleet}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a147dbfd5685c27e2b55eb80bc695bb97}{protocol::\+fleet::\+in\+Bounds}} (int x, int y)
+\item 
+\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a29c52a8aca26d9ae9ad7e2a764ae5825}{protocol::\+fleet::\+create\+Occupancy\+Grid}} ()
+\item 
+QVector$<$ QPoint $>$ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a21aec14283527a2d1f0589c6c46eab95}{protocol::\+fleet::\+ship\+Cells}} (const \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} \&placement)
+\item 
+\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{Placement\+Error}} \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_afdaa6bfe2c40f83732060b5290355d52}{protocol::\+fleet::\+validate\+Ship\+Placement}} (const \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \&occupied, const QVector$<$ QPoint $>$ \&cells)
+\item 
+void \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1ebaea4255070a9c2f38c3ccccbd541a}{protocol::\+fleet::\+occupy\+Ship\+Cells}} (\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \&occupied, const QVector$<$ QPoint $>$ \&cells)
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_ae15e88128d479131a0b509bde6818901}{protocol::\+fleet::\+matches\+Fleet\+Specification}} (const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&placements)
+\end{DoxyCompactItemize}

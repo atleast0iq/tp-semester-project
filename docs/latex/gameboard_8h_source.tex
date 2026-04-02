@@ -1,0 +1,51 @@
+\doxysection{gameboard.\+h}
+\hypertarget{gameboard_8h_source}{}\label{gameboard_8h_source}\index{src/server/gameboard.h@{src/server/gameboard.h}}
+\doxymbox{\hyperlink{gameboard_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QJsonArray>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QPoint>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QVector>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{apiprotocol_8h}{apiprotocol.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\doxymbox{\hyperlink{class_game_board_ac622cadcc81b3ffb71d8feb4506c04ac}{GameBoard}}\ final\ \{}
+\DoxyCodeLine{00011\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00012\ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_game_board_1_1_fire_result}{FireResult}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{struct_game_board_1_1_fire_result_a51366b27e68b10fe2e3719ca9f611e19}{hit}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{struct_game_board_1_1_fire_result_ae94eea5e7d84169ebdbb54e3bff1d182}{sunk}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00015\ \ \ \};}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \doxymbox{\hyperlink{class_game_board_ac622cadcc81b3ffb71d8feb4506c04ac}{GameBoard}}();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_game_board_aee8ac1989d61835d3f27620afa9e370d}{placeFleet}}(\textcolor{keyword}{const}\ QVector<protocol::ShipPlacement>\&\ placements,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\&\ error);}
+\DoxyCodeLine{00021\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_game_board_a36a08fcd0c113557bae65e8e024c6ca4}{fireAt}}(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y,\ \doxymbox{\hyperlink{struct_game_board_1_1_fire_result}{FireResult}}\&\ result,\ QString\&\ error);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_game_board_a544309b4d7a6bacfc84b967f08d87322}{fleetReady}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_game_board_a49a2559525940a685e4eeb207c77563b}{allShipsSunk}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00025\ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{class_game_board_a93e2143fc335683454bc81a801f7bafd}{shipsRemaining}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ QJsonArray\ \doxymbox{\hyperlink{class_game_board_a038d8cb6f03fbf537ae1adbbe3fb87a7}{toJsonRows}}(\textcolor{keywordtype}{bool}\ revealShips)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00029\ \ \ \textcolor{keyword}{struct\ }Cell\ \{}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ shipIndex\ =\ -\/1;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{bool}\ shot\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00032\ \ \ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{keyword}{struct\ }Ship\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ QVector<QPoint>\ cells;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ hits\ =\ 0;}
+\DoxyCodeLine{00037\ \ \ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \ \ \textcolor{keywordtype}{void}\ reset();}
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{bool}\ inBounds(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ QVector<QVector<Cell>>\ m\_grid;}
+\DoxyCodeLine{00043\ \ \ QVector<Ship>\ m\_ships;}
+\DoxyCodeLine{00044\ \ \ \textcolor{keywordtype}{bool}\ m\_fleetReady\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00045\ \};}
+
+\end{DoxyCode}

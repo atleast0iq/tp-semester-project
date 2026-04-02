@@ -1,0 +1,64 @@
+\doxysection{src/\+common/\+apiprotocol.h File Reference}
+\hypertarget{apiprotocol_8h}{}\label{apiprotocol_8h}\index{src/common/apiprotocol.h@{src/common/apiprotocol.h}}
+{\ttfamily \+\#include $<$QByte\+Array$>$}\newline
+{\ttfamily \+\#include $<$QJson\+Array$>$}\newline
+{\ttfamily \+\#include $<$QJson\+Object$>$}\newline
+{\ttfamily \+\#include $<$QJson\+Value$>$}\newline
+{\ttfamily \+\#include $<$QString$>$}\newline
+{\ttfamily \+\#include $<$QVector$>$}\newline
+Include dependency graph for apiprotocol.\+h:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{apiprotocol_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{apiprotocol_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{protocol::\+\+Ship\+Placement}}
+\item 
+struct \doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{protocol::\+\+Message\+Parse\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \doxymbox{\hyperlink{namespaceprotocol}{protocol}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const QVector$<$ int $>$ \& \doxymbox{\hyperlink{namespaceprotocol_a0fd1b187095a4ad00fa7041c88bc9d89}{protocol::\+fleet\+Specification}} ()
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_a2c43902df9ffe603edd57b2340c1b449}{protocol::\+json\+Value\+To\+Int}} (const QJson\+Value \&value, int \&result)
+\item 
+QByte\+Array \doxymbox{\hyperlink{namespaceprotocol_a86c54eb7dd880e437670146ced9752ab}{protocol::\+serialize\+Line}} (const QJson\+Object \&message)
+\item 
+\doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{Message\+Parse\+Result}} \doxymbox{\hyperlink{namespaceprotocol_a41a88d0dd04f8f49fc4455344935a2ad}{protocol::\+parse\+Message\+Line}} (QByte\+Array line)
+\item 
+QJson\+Object \doxymbox{\hyperlink{namespaceprotocol_a2b962212c5797d57875f5c0eb162fb8b}{protocol::\+make\+Success\+Response}} (const QString \&request\+Id, const QJson\+Object \&payload)
+\item 
+QJson\+Object \doxymbox{\hyperlink{namespaceprotocol_a8d070558139df1c97efd8fd86d88ad8c}{protocol::\+make\+Error\+Response}} (const QString \&request\+Id, const QString \&code, const QString \&message)
+\item 
+QJson\+Object \doxymbox{\hyperlink{namespaceprotocol_a7b872f974bd0ca5ca01f07698adab0aa}{protocol::\+make\+Event\+Message}} (const QString \&event\+Name, const QJson\+Object \&payload)
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_a978b421d0a7e2854a9afe695ce0cfb47}{protocol::\+is\+Event\+Message}} (const QJson\+Object \&message)
+\item 
+QJson\+Array \doxymbox{\hyperlink{namespaceprotocol_af208909d93907ea89036f5142218c799}{protocol::\+ship\+Placements\+To\+Json}} (const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&placements)
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_a1b5f36e3cd80d66821e0f7e3b65c8749}{protocol::\+ship\+Placements\+From\+Json}} (const QJson\+Value \&value, QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&placements, QString \&error)
+\item 
+QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \doxymbox{\hyperlink{namespaceprotocol_adaccbd44f7aa8166192e14bf9e2ba627}{protocol::\+generate\+Random\+Fleet}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr int \doxymbox{\hyperlink{namespaceprotocol_af9ff5a713b3f5db507073645c4725c38}{protocol::\+k\+Board\+Size}} = 10
+\end{DoxyCompactItemize}

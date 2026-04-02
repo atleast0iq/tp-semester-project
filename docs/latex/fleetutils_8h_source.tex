@@ -1,0 +1,32 @@
+\doxysection{fleetutils.\+h}
+\hypertarget{fleetutils_8h_source}{}\label{fleetutils_8h_source}\index{src/common/fleetutils.h@{src/common/fleetutils.h}}
+\doxymbox{\hyperlink{fleetutils_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QPoint>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QVector>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{apiprotocol_8h}{apiprotocol.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{namespace\ }\doxymbox{\hyperlink{namespaceprotocol_1_1fleet}{protocol::fleet}}\ \{}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{enum\ class}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{PlacementError}}\ \{}
+\DoxyCodeLine{00011\ \ \ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a6adf97f83acf6453d4a6a4b1070f3754}{None}},}
+\DoxyCodeLine{00012\ \ \ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a46dc1018ac1d8fca7c2752a61ce2fd0f}{OutOfBounds}},}
+\DoxyCodeLine{00013\ \ \ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075ad09c072ea888b253f3ff094ce5ed1650}{OverlapOrTouch}},}
+\DoxyCodeLine{00014\ \};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{using\ }\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{OccupancyGrid}}\ =\ QVector<QVector<bool>>;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a147dbfd5685c27e2b55eb80bc695bb97}{inBounds}}(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{00019\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{OccupancyGrid}}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a29c52a8aca26d9ae9ad7e2a764ae5825}{createOccupancyGrid}}();}
+\DoxyCodeLine{00020\ QVector<QPoint>\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a21aec14283527a2d1f0589c6c46eab95}{shipCells}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{ShipPlacement}}\&\ placement);}
+\DoxyCodeLine{00021\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{PlacementError}}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_afdaa6bfe2c40f83732060b5290355d52}{validateShipPlacement}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{OccupancyGrid}}\&\ occupied,}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QVector<QPoint>\&\ cells);}
+\DoxyCodeLine{00023\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1ebaea4255070a9c2f38c3ccccbd541a}{occupyShipCells}}(\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{OccupancyGrid}}\&\ occupied,\ \textcolor{keyword}{const}\ QVector<QPoint>\&\ cells);}
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_ae15e88128d479131a0b509bde6818901}{matchesFleetSpecification}}(\textcolor{keyword}{const}\ QVector<ShipPlacement>\&\ placements);}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \}\ \ \textcolor{comment}{//\ namespace\ protocol::fleet}}
+
+\end{DoxyCode}

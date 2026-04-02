@@ -1,0 +1,20 @@
+<map id="src/common/fleetutils.h" name="src/common/fleetutils.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="26,5,184,32"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="6,80,68,107"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,35,61,70,57,67,94,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,155,74,181"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="104,30,97,67,82,108,61,143,56,140,77,106,92,66,101,35"/>
+<area shape="rect" id="Node000004" href="$apiprotocol_8h.html" title=" " alt="" coords="208,80,303,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="131,30,218,72,213,74,131,35"/>
+<area shape="poly" id="edge9_Node000004_Node000003" title=" " alt="" coords="219,110,89,153,88,148,217,105"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="98,155,187,181"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="238,107,176,148,174,144,233,108"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="210,155,301,181"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="257,105,258,140,253,138,254,109"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="324,155,422,181"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="277,105,342,146,337,146,275,110"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="446,155,537,181"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="297,105,438,149,433,150,296,110"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="562,155,627,181"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="304,101,549,153,544,156,303,106"/>
+</map>

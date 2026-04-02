@@ -1,0 +1,59 @@
+\doxysection{databasemanager.\+h}
+\hypertarget{databasemanager_8h_source}{}\label{databasemanager_8h_source}\index{src/server/databasemanager.h@{src/server/databasemanager.h}}
+\doxymbox{\hyperlink{databasemanager_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QJsonObject>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QtGlobal>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }DatabaseManager\ final\ \{}
+\DoxyCodeLine{00008\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{UserInfo}}\ \{}
+\DoxyCodeLine{00010\ \ \ \ \ qint64\ \textcolor{keywordtype}{id}\ =\ 0;}
+\DoxyCodeLine{00011\ \ \ \ \ QString\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_info_ac813f844d1b3da56e5fbbc3d525fe039}{username}};}
+\DoxyCodeLine{00012\ \ \ \};}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{UserStats}}\ \{}
+\DoxyCodeLine{00015\ \ \ \ \ qint64\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_a4d7c9062a38eff179daa379216dcd40c}{userId}}\ =\ 0;}
+\DoxyCodeLine{00016\ \ \ \ \ QString\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_aee4d9ffb995efe6ac7c8f817ff72f45a}{username}};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_ad09b90bdf9bde4e49835c482056ce939}{gamesPlayed}}\ =\ 0;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_af8b06a85a5771af2455701c731dfaebb}{wins}}\ =\ 0;}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_a7f7222b61423128d9b48614816f16759}{losses}}\ =\ 0;}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_aa54c4e832a6608317817929757afac94}{shots}}\ =\ 0;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats_ae49c0a40e6e84425e0344172bd4fc150}{hits}}\ =\ 0;}
+\DoxyCodeLine{00022\ \ \ \};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \textcolor{keyword}{static}\ DatabaseManager\&\ \doxymbox{\hyperlink{class_database_manager_a4abb527066e28f3928ef45af856e134c}{instance}}();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_aa2b46d5be867790df8dc351406d63e7f}{initialize}}(\textcolor{keyword}{const}\ QString\&\ databasePath,\ QString\&\ error);}
+\DoxyCodeLine{00027\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_a4fcc63c4194adaa196d43d341c87d4f7}{registerUser}}(\textcolor{keyword}{const}\ QString\&\ username,\ \textcolor{keyword}{const}\ QString\&\ password,}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{UserInfo}}\&\ user,\ QString\&\ error);}
+\DoxyCodeLine{00029\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_afb928627cb584fe3693d6f0e727f6f68}{authorizeUser}}(\textcolor{keyword}{const}\ QString\&\ username,\ \textcolor{keyword}{const}\ QString\&\ password,}
+\DoxyCodeLine{00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{UserInfo}}\&\ user,\ QString\&\ error);}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_aa197b94a9b8c851df4a104eab6b4e17a}{fetchStatisticsByUserId}}(qint64\ userId,\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{UserStats}}\&\ stats,\ QString\&\ error);}
+\DoxyCodeLine{00032\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_a2cde5a6c0f2b15cde4fe7acdbf415caa}{fetchStatisticsByUsername}}(\textcolor{keyword}{const}\ QString\&\ username,\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{UserStats}}\&\ stats,}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\&\ error);}
+\DoxyCodeLine{00034\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_aeb84f3672990f9b59ee8bb152b442dd9}{recordShot}}(qint64\ userId,\ \textcolor{keywordtype}{bool}\ hit,\ QString\&\ error);}
+\DoxyCodeLine{00035\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_database_manager_a64ba21cab1f74eaed2d62c8c3902f98c}{recordGameResult}}(qint64\ winnerId,\ qint64\ loserId,\ QString\&\ error);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00038\ \ \ DatabaseManager()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \ \textcolor{keywordtype}{bool}\ applyMigrations(QString\&\ error);}
+\DoxyCodeLine{00041\ \ \ \textcolor{keywordtype}{bool}\ readUserVersion(\textcolor{keywordtype}{int}\&\ version,\ QString\&\ error)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00042\ \ \ \textcolor{keywordtype}{bool}\ setUserVersion(\textcolor{keywordtype}{int}\ version,\ QString\&\ error)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00043\ \ \ \textcolor{keywordtype}{bool}\ queryUserByUsername(\textcolor{keyword}{const}\ QString\&\ username,\ qint64\&\ userId,}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\&\ passwordHash,\ QString\&\ salt,}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\&\ error)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ QString\ m\_connectionName\ =\ QStringLiteral(\textcolor{stringliteral}{"{}battleship\_sqlite"{}});}
+\DoxyCodeLine{00048\ \ \ QString\ m\_databasePath;}
+\DoxyCodeLine{00049\ \ \ \textcolor{keywordtype}{bool}\ m\_initialized\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00050\ \};}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ QJsonObject\ \doxymbox{\hyperlink{databasemanager_8h_a3bb2bcde6b8729e98edddf2af5b003be}{toJson}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{DatabaseManager::UserInfo}}\&\ user);}
+\DoxyCodeLine{00053\ QJsonObject\ \doxymbox{\hyperlink{databasemanager_8h_a3bb2bcde6b8729e98edddf2af5b003be}{toJson}}(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{DatabaseManager::UserStats}}\&\ stats);}
+
+\end{DoxyCode}

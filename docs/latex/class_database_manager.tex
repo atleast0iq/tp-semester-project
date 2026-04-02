@@ -1,0 +1,94 @@
+\doxysection{Database\+Manager Class Reference}
+\hypertarget{class_database_manager}{}\label{class_database_manager}\index{DatabaseManager@{DatabaseManager}}
+
+
+{\ttfamily \+\#include $<$databasemanager.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{User\+Info}}
+\item 
+struct \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{User\+Stats}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_aa2b46d5be867790df8dc351406d63e7f}{initialize}} (const QString \&database\+Path, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_a4fcc63c4194adaa196d43d341c87d4f7}{register\+User}} (const QString \&username, const QString \&password, \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{User\+Info}} \&user, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_afb928627cb584fe3693d6f0e727f6f68}{authorize\+User}} (const QString \&username, const QString \&password, \doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{User\+Info}} \&user, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_aa197b94a9b8c851df4a104eab6b4e17a}{fetch\+Statistics\+By\+User\+Id}} (qint64 user\+Id, \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{User\+Stats}} \&stats, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_a2cde5a6c0f2b15cde4fe7acdbf415caa}{fetch\+Statistics\+By\+Username}} (const QString \&username, \doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{User\+Stats}} \&stats, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_aeb84f3672990f9b59ee8bb152b442dd9}{record\+Shot}} (qint64 user\+Id, bool hit, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_database_manager_a64ba21cab1f74eaed2d62c8c3902f98c}{record\+Game\+Result}} (qint64 winner\+Id, qint64 loser\+Id, QString \&error)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \doxymbox{\hyperlink{class_database_manager}{Database\+Manager}} \& \doxymbox{\hyperlink{class_database_manager_a4abb527066e28f3928ef45af856e134c}{instance}} ()
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_database_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_database_manager_afb928627cb584fe3693d6f0e727f6f68}\index{DatabaseManager@{DatabaseManager}!authorizeUser@{authorizeUser}}
+\index{authorizeUser@{authorizeUser}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{authorizeUser()}{authorizeUser()}}
+{\footnotesize\ttfamily \label{class_database_manager_afb928627cb584fe3693d6f0e727f6f68} 
+bool Database\+Manager::\+authorize\+User (\begin{DoxyParamCaption}\item[{const QString \&}]{username}{, }\item[{const QString \&}]{password}{, }\item[{\doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{User\+Info}} \&}]{user}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_database_manager_aa197b94a9b8c851df4a104eab6b4e17a}\index{DatabaseManager@{DatabaseManager}!fetchStatisticsByUserId@{fetchStatisticsByUserId}}
+\index{fetchStatisticsByUserId@{fetchStatisticsByUserId}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{fetchStatisticsByUserId()}{fetchStatisticsByUserId()}}
+{\footnotesize\ttfamily \label{class_database_manager_aa197b94a9b8c851df4a104eab6b4e17a} 
+bool Database\+Manager::\+fetch\+Statistics\+By\+User\+Id (\begin{DoxyParamCaption}\item[{qint64}]{user\+Id}{, }\item[{\doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{User\+Stats}} \&}]{stats}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_database_manager_a2cde5a6c0f2b15cde4fe7acdbf415caa}\index{DatabaseManager@{DatabaseManager}!fetchStatisticsByUsername@{fetchStatisticsByUsername}}
+\index{fetchStatisticsByUsername@{fetchStatisticsByUsername}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{fetchStatisticsByUsername()}{fetchStatisticsByUsername()}}
+{\footnotesize\ttfamily \label{class_database_manager_a2cde5a6c0f2b15cde4fe7acdbf415caa} 
+bool Database\+Manager::\+fetch\+Statistics\+By\+Username (\begin{DoxyParamCaption}\item[{const QString \&}]{username}{, }\item[{\doxymbox{\hyperlink{struct_database_manager_1_1_user_stats}{User\+Stats}} \&}]{stats}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_database_manager_aa2b46d5be867790df8dc351406d63e7f}\index{DatabaseManager@{DatabaseManager}!initialize@{initialize}}
+\index{initialize@{initialize}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily \label{class_database_manager_aa2b46d5be867790df8dc351406d63e7f} 
+bool Database\+Manager::\+initialize (\begin{DoxyParamCaption}\item[{const QString \&}]{database\+Path}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_database_manager_a4abb527066e28f3928ef45af856e134c}\index{DatabaseManager@{DatabaseManager}!instance@{instance}}
+\index{instance@{instance}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{instance()}{instance()}}
+{\footnotesize\ttfamily \label{class_database_manager_a4abb527066e28f3928ef45af856e134c} 
+\doxymbox{\hyperlink{class_database_manager}{Database\+Manager}} \& Database\+Manager::\+instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{class_database_manager_a64ba21cab1f74eaed2d62c8c3902f98c}\index{DatabaseManager@{DatabaseManager}!recordGameResult@{recordGameResult}}
+\index{recordGameResult@{recordGameResult}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{recordGameResult()}{recordGameResult()}}
+{\footnotesize\ttfamily \label{class_database_manager_a64ba21cab1f74eaed2d62c8c3902f98c} 
+bool Database\+Manager::\+record\+Game\+Result (\begin{DoxyParamCaption}\item[{qint64}]{winner\+Id}{, }\item[{qint64}]{loser\+Id}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_database_manager_aeb84f3672990f9b59ee8bb152b442dd9}\index{DatabaseManager@{DatabaseManager}!recordShot@{recordShot}}
+\index{recordShot@{recordShot}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{recordShot()}{recordShot()}}
+{\footnotesize\ttfamily \label{class_database_manager_aeb84f3672990f9b59ee8bb152b442dd9} 
+bool Database\+Manager::\+record\+Shot (\begin{DoxyParamCaption}\item[{qint64}]{user\+Id}{, }\item[{bool}]{hit}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_database_manager_a4fcc63c4194adaa196d43d341c87d4f7}\index{DatabaseManager@{DatabaseManager}!registerUser@{registerUser}}
+\index{registerUser@{registerUser}!DatabaseManager@{DatabaseManager}}
+\doxysubsubsection{\texorpdfstring{registerUser()}{registerUser()}}
+{\footnotesize\ttfamily \label{class_database_manager_a4fcc63c4194adaa196d43d341c87d4f7} 
+bool Database\+Manager::\+register\+User (\begin{DoxyParamCaption}\item[{const QString \&}]{username}{, }\item[{const QString \&}]{password}{, }\item[{\doxymbox{\hyperlink{struct_database_manager_1_1_user_info}{User\+Info}} \&}]{user}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+src/\+server/\+\doxymbox{\hyperlink{databasemanager_8h}{databasemanager.\+h}}\item 
+src/\+server/\+\doxymbox{\hyperlink{databasemanager_8cpp}{databasemanager.\+cpp}}\end{DoxyCompactItemize}

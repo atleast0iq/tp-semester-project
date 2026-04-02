@@ -1,0 +1,106 @@
+\chapter{Морской бой /\+ Battleship }
+\hypertarget{md__r_e_a_d_m_e}{}\label{md__r_e_a_d_m_e}\index{Морской бой / Battleship@{Морской бой / Battleship}}
+\label{md__r_e_a_d_m_e_autotoc_md18}%
+\Hypertarget{md__r_e_a_d_m_e_autotoc_md18}%
+
+
+\hypertarget{md__r_e_a_d_m_e_autotoc_md19}{}\doxysection{\texorpdfstring{О проекте}{О проекте}}\label{md__r_e_a_d_m_e_autotoc_md19}
+Учебный проект в рамках курса "{}Технологии и методы программирования"{}. На текущем этапе реализует сетевой MVP игры "{}Морской бой"{} с клиент-\/серверной архитектурой на {\ttfamily Qt + TCP}, SQLite-\/хранилищем и консольным клиентом для тестирования API.\hypertarget{md__r_e_a_d_m_e_autotoc_md20}{}\doxysection{\texorpdfstring{Команда}{Команда}}\label{md__r_e_a_d_m_e_autotoc_md20}
+
+\begin{DoxyItemize}
+\item Варламов Егор Михайлович
+\item Иляков Иван Константинович
+\item Хайруллин Тахир Зиннурович
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md21}{}\doxysection{\texorpdfstring{Текущий статус}{Текущий статус}}\label{md__r_e_a_d_m_e_autotoc_md21}
+Сейчас в репозитории реализован MVP клиент-\/серверного приложения на {\ttfamily Qt + TCP}:\+
+\begin{DoxyItemize}
+\item {\ttfamily battleship\+\_\+server} — сервер с JSON API, игровой логикой "{}Морского боя"{} и SQLite
+\item {\ttfamily battleship\+\_\+client} — консольный клиент для тестирования API без GUI
+\item {\ttfamily src/\+common} — общий протокол и утилиты флота для сервера и клиента
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md22}{}\doxysection{\texorpdfstring{GUI клиент}{GUI клиент}}\label{md__r_e_a_d_m_e_autotoc_md22}
+Реализован клиент с графическим интерфейсом (на Qt Widgets).\hypertarget{md__r_e_a_d_m_e_autotoc_md23}{}\doxysubsection{\texorpdfstring{Возможности:\+}{Возможности:\+}}\label{md__r_e_a_d_m_e_autotoc_md23}
+
+\begin{DoxyItemize}
+\item Подключение к серверу
+\item Регистрация + автроизация пользователя
+\item Просмотр активных игр
+\item Отображение текущего пользователя ~\newline
+
+\item Обработка сетевых ошибок ~\newline
+
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md24}{}\doxysection{\texorpdfstring{Поддерживаются:\+}{Поддерживаются:\+}}\label{md__r_e_a_d_m_e_autotoc_md24}
+
+\begin{DoxyItemize}
+\item регистрация и авторизация пользователей
+\item хранение статистики в SQLite
+\item создание комнаты, подключение второго игрока
+\item случайная или пользовательская расстановка флота через API
+\item ходы, проверка попаданий и обновление статистики
+\end{DoxyItemize}
+
+Описание архитектуры и API:\+
+\begin{DoxyItemize}
+\item {\ttfamily \doxylink{api_8md}{docs/\+api.\+md}}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md25}{}\doxysection{\texorpdfstring{Сборка}{Сборка}}\label{md__r_e_a_d_m_e_autotoc_md25}
+Проект использует {\ttfamily CMake} и компилятор {\ttfamily clang++}.
+
+Собрать оба приложения:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ -\/-\/preset\ clang-\/debug}
+\DoxyCodeLine{cmake\ -\/-\/build\ -\/-\/preset\ build-\/debug}
+
+\end{DoxyCode}
+
+
+Собрать только клиент:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ -\/-\/preset\ clang-\/client-\/debug}
+\DoxyCodeLine{cmake\ -\/-\/build\ -\/-\/preset\ build-\/client}
+
+\end{DoxyCode}
+
+
+Собрать только сервер:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ -\/-\/preset\ clang-\/server-\/debug}
+\DoxyCodeLine{cmake\ -\/-\/build\ -\/-\/preset\ build-\/server}
+
+\end{DoxyCode}
+
+
+Собрать оба приложения в релизной версии:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake\ -\/-\/preset\ clang-\/release}
+\DoxyCodeLine{cmake\ -\/-\/build\ -\/-\/preset\ build-\/release}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md26}{}\doxysection{\texorpdfstring{Запуск}{Запуск}}\label{md__r_e_a_d_m_e_autotoc_md26}
+Запустить сервер:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./build/\{preset\}/battleship\_server\ -\/-\/address\ 0.0.0.0\ -\/-\/port\ 6767\ -\/-\/database\ battleship.db}
+
+\end{DoxyCode}
+
+
+Запустить консольный клиент:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./build/\{preset\}/battleship\_client\ -\/-\/host\ 127.0.0.1\ -\/-\/port\ 6767}
+
+\end{DoxyCode}
+
+
+Пример команд в клиенте:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{register\ alice\ secret}
+\DoxyCodeLine{create-\/game}
+\DoxyCodeLine{place-\/random}
+\DoxyCodeLine{state}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md27}{}\doxysection{\texorpdfstring{Docker}{Docker}}\label{md__r_e_a_d_m_e_autotoc_md27}
+Собрать и запустить сервер через Docker Compose:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ compose\ up\ -\/-\/build}
+
+\end{DoxyCode}
+ SQLite используется сервером как встраиваемая файловая БД в Docker volume {\ttfamily battleship\+\_\+data}. 

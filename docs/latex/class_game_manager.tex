@@ -1,0 +1,91 @@
+\doxysection{Game\+Manager Class Reference}
+\hypertarget{class_game_manager}{}\label{class_game_manager}\index{GameManager@{GameManager}}
+
+
+{\ttfamily \+\#include $<$gamemanager.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{Player\+Identity}}
+\item 
+struct \doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}} \doxymbox{\hyperlink{class_game_manager_a3d55970af8d3de80658e47052371bb1d}{create\+Game}} (const \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{Player\+Identity}} \&player)
+\item 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}} \doxymbox{\hyperlink{class_game_manager_a04f0f93f86f1ec6be58244bb6764eb72}{list\+Games}} () const
+\item 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}} \doxymbox{\hyperlink{class_game_manager_ad8c3aa478888cbccf6dab7196a36da95}{join\+Game}} (const QString \&game\+Id, const \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{Player\+Identity}} \&player)
+\item 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}} \doxymbox{\hyperlink{class_game_manager_a1e59a296650d8330b475452c595a527d}{place\+Ships}} (const QString \&game\+Id, qint64 user\+Id, const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{protocol::\+\+Ship\+Placement}} $>$ \&placements)
+\item 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}} \doxymbox{\hyperlink{class_game_manager_abc57b9609703e3390892f06b5bf06acb}{game\+State}} (const QString \&game\+Id, qint64 user\+Id) const
+\item 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Action\+Result}} \doxymbox{\hyperlink{class_game_manager_ac98ce5b9c4a6db31d9b142ca33aaec5f}{fire}} (const QString \&game\+Id, qint64 user\+Id, int x, int y)
+\item 
+QString \doxymbox{\hyperlink{class_game_manager_aee963cda8a76fe107dabe59db4e2751a}{current\+Game\+For\+User}} (qint64 user\+Id) const
+\item 
+QVector$<$ qint64 $>$ \doxymbox{\hyperlink{class_game_manager_af4f5982d280593ddf73d53bbf7440a8a}{participant\+User\+Ids}} (const QString \&game\+Id) const
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_game_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_game_manager_a3d55970af8d3de80658e47052371bb1d}\index{GameManager@{GameManager}!createGame@{createGame}}
+\index{createGame@{createGame}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{createGame()}{createGame()}}
+{\footnotesize\ttfamily \label{class_game_manager_a3d55970af8d3de80658e47052371bb1d} 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Game\+Manager::\+\+Action\+Result}} Game\+Manager::\+create\+Game (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{Player\+Identity}} \&}]{player}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_game_manager_aee963cda8a76fe107dabe59db4e2751a}\index{GameManager@{GameManager}!currentGameForUser@{currentGameForUser}}
+\index{currentGameForUser@{currentGameForUser}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{currentGameForUser()}{currentGameForUser()}}
+{\footnotesize\ttfamily \label{class_game_manager_aee963cda8a76fe107dabe59db4e2751a} 
+QString Game\+Manager::\+current\+Game\+For\+User (\begin{DoxyParamCaption}\item[{qint64}]{user\+Id}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_manager_ac98ce5b9c4a6db31d9b142ca33aaec5f}\index{GameManager@{GameManager}!fire@{fire}}
+\index{fire@{fire}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{fire()}{fire()}}
+{\footnotesize\ttfamily \label{class_game_manager_ac98ce5b9c4a6db31d9b142ca33aaec5f} 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Game\+Manager::\+\+Action\+Result}} Game\+Manager::\+fire (\begin{DoxyParamCaption}\item[{const QString \&}]{game\+Id}{, }\item[{qint64}]{user\+Id}{, }\item[{int}]{x}{, }\item[{int}]{y}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_game_manager_abc57b9609703e3390892f06b5bf06acb}\index{GameManager@{GameManager}!gameState@{gameState}}
+\index{gameState@{gameState}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{gameState()}{gameState()}}
+{\footnotesize\ttfamily \label{class_game_manager_abc57b9609703e3390892f06b5bf06acb} 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Game\+Manager::\+\+Action\+Result}} Game\+Manager::\+game\+State (\begin{DoxyParamCaption}\item[{const QString \&}]{game\+Id}{, }\item[{qint64}]{user\+Id}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_manager_ad8c3aa478888cbccf6dab7196a36da95}\index{GameManager@{GameManager}!joinGame@{joinGame}}
+\index{joinGame@{joinGame}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{joinGame()}{joinGame()}}
+{\footnotesize\ttfamily \label{class_game_manager_ad8c3aa478888cbccf6dab7196a36da95} 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Game\+Manager::\+\+Action\+Result}} Game\+Manager::\+join\+Game (\begin{DoxyParamCaption}\item[{const QString \&}]{game\+Id}{, }\item[{const \doxymbox{\hyperlink{struct_game_manager_1_1_player_identity}{Player\+Identity}} \&}]{player}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_game_manager_a04f0f93f86f1ec6be58244bb6764eb72}\index{GameManager@{GameManager}!listGames@{listGames}}
+\index{listGames@{listGames}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{listGames()}{listGames()}}
+{\footnotesize\ttfamily \label{class_game_manager_a04f0f93f86f1ec6be58244bb6764eb72} 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Game\+Manager::\+\+Action\+Result}} Game\+Manager::\+list\+Games (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_manager_af4f5982d280593ddf73d53bbf7440a8a}\index{GameManager@{GameManager}!participantUserIds@{participantUserIds}}
+\index{participantUserIds@{participantUserIds}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{participantUserIds()}{participantUserIds()}}
+{\footnotesize\ttfamily \label{class_game_manager_af4f5982d280593ddf73d53bbf7440a8a} 
+QVector$<$ qint64 $>$ Game\+Manager::\+participant\+User\+Ids (\begin{DoxyParamCaption}\item[{const QString \&}]{game\+Id}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_manager_a1e59a296650d8330b475452c595a527d}\index{GameManager@{GameManager}!placeShips@{placeShips}}
+\index{placeShips@{placeShips}!GameManager@{GameManager}}
+\doxysubsubsection{\texorpdfstring{placeShips()}{placeShips()}}
+{\footnotesize\ttfamily \label{class_game_manager_a1e59a296650d8330b475452c595a527d} 
+\doxymbox{\hyperlink{struct_game_manager_1_1_action_result}{Game\+Manager::\+\+Action\+Result}} Game\+Manager::\+place\+Ships (\begin{DoxyParamCaption}\item[{const QString \&}]{game\+Id}{, }\item[{qint64}]{user\+Id}{, }\item[{const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{protocol::\+\+Ship\+Placement}} $>$ \&}]{placements}{}\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+src/\+server/\+\doxymbox{\hyperlink{gamemanager_8h}{gamemanager.\+h}}\item 
+src/\+server/\+\doxymbox{\hyperlink{gamemanager_8cpp}{gamemanager.\+cpp}}\end{DoxyCompactItemize}

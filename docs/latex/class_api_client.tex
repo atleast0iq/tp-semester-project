@@ -1,0 +1,100 @@
+\doxysection{Api\+Client Class Reference}
+\hypertarget{class_api_client}{}\label{class_api_client}\index{ApiClient@{ApiClient}}
+
+
+{\ttfamily \+\#include $<$apiclient.\+h$>$}
+
+
+
+Inheritance diagram for Api\+Client:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{class_api_client__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Api\+Client:\+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=136pt]{class_api_client__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{class_api_client_a5de8724f84d5c90a2b32fa0e17e0ad43}{notification\+Received}} (const QJson\+Object \&notification)
+\item 
+void \doxymbox{\hyperlink{class_api_client_aa1de8f4772691184576eb9b73a673682}{protocol\+Error\+Received}} (const QString \&error)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{class_api_client_aa93bafb15eab582ca6d576422def276f}{connect\+To\+Server}} (const QString \&host, quint16 port, int timeout\+Ms, QString \&error)
+\item 
+void \doxymbox{\hyperlink{class_api_client_abfdfffc71a821fe5cc315e41622a4269}{disconnect\+From\+Server}} ()
+\item 
+bool \doxymbox{\hyperlink{class_api_client_ac8874a09051b1ecd112732cb3c8979d0}{is\+Connected}} () const
+\item 
+QJson\+Object \doxymbox{\hyperlink{class_api_client_a45796fbb3ec3a0fa45964134b9deb5e5}{send\+Request}} (const QString \&action, const QJson\+Object \&payload, int timeout\+Ms, QString \&error)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \doxymbox{\hyperlink{class_api_client}{Api\+Client}} \& \doxymbox{\hyperlink{class_api_client_aed53f04f7ffef3b01dbd15dd3122e021}{instance}} ()
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{class_api_client_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_api_client_aa93bafb15eab582ca6d576422def276f}\index{ApiClient@{ApiClient}!connectToServer@{connectToServer}}
+\index{connectToServer@{connectToServer}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{connectToServer()}{connectToServer()}}
+{\footnotesize\ttfamily \label{class_api_client_aa93bafb15eab582ca6d576422def276f} 
+bool Api\+Client::\+connect\+To\+Server (\begin{DoxyParamCaption}\item[{const QString \&}]{host}{, }\item[{quint16}]{port}{, }\item[{int}]{timeout\+Ms}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_api_client_abfdfffc71a821fe5cc315e41622a4269}\index{ApiClient@{ApiClient}!disconnectFromServer@{disconnectFromServer}}
+\index{disconnectFromServer@{disconnectFromServer}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{disconnectFromServer()}{disconnectFromServer()}}
+{\footnotesize\ttfamily \label{class_api_client_abfdfffc71a821fe5cc315e41622a4269} 
+void Api\+Client::\+disconnect\+From\+Server (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_api_client_aed53f04f7ffef3b01dbd15dd3122e021}\index{ApiClient@{ApiClient}!instance@{instance}}
+\index{instance@{instance}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{instance()}{instance()}}
+{\footnotesize\ttfamily \label{class_api_client_aed53f04f7ffef3b01dbd15dd3122e021} 
+\doxymbox{\hyperlink{class_api_client}{Api\+Client}} \& Api\+Client::\+instance (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{class_api_client_ac8874a09051b1ecd112732cb3c8979d0}\index{ApiClient@{ApiClient}!isConnected@{isConnected}}
+\index{isConnected@{isConnected}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{isConnected()}{isConnected()}}
+{\footnotesize\ttfamily \label{class_api_client_ac8874a09051b1ecd112732cb3c8979d0} 
+bool Api\+Client::\+is\+Connected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_api_client_a5de8724f84d5c90a2b32fa0e17e0ad43}\index{ApiClient@{ApiClient}!notificationReceived@{notificationReceived}}
+\index{notificationReceived@{notificationReceived}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{notificationReceived}{notificationReceived}}
+{\footnotesize\ttfamily \label{class_api_client_a5de8724f84d5c90a2b32fa0e17e0ad43} 
+void Api\+Client::\+notification\+Received (\begin{DoxyParamCaption}\item[{const QJson\+Object \&}]{notification}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\Hypertarget{class_api_client_aa1de8f4772691184576eb9b73a673682}\index{ApiClient@{ApiClient}!protocolErrorReceived@{protocolErrorReceived}}
+\index{protocolErrorReceived@{protocolErrorReceived}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{protocolErrorReceived}{protocolErrorReceived}}
+{\footnotesize\ttfamily \label{class_api_client_aa1de8f4772691184576eb9b73a673682} 
+void Api\+Client::\+protocol\+Error\+Received (\begin{DoxyParamCaption}\item[{const QString \&}]{error}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\Hypertarget{class_api_client_a45796fbb3ec3a0fa45964134b9deb5e5}\index{ApiClient@{ApiClient}!sendRequest@{sendRequest}}
+\index{sendRequest@{sendRequest}!ApiClient@{ApiClient}}
+\doxysubsubsection{\texorpdfstring{sendRequest()}{sendRequest()}}
+{\footnotesize\ttfamily \label{class_api_client_a45796fbb3ec3a0fa45964134b9deb5e5} 
+QJson\+Object Api\+Client::\+send\+Request (\begin{DoxyParamCaption}\item[{const QString \&}]{action}{, }\item[{const QJson\+Object \&}]{payload}{, }\item[{int}]{timeout\+Ms}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+src/\+client/\+\doxymbox{\hyperlink{apiclient_8h}{apiclient.\+h}}\item 
+src/\+client/\+\doxymbox{\hyperlink{apiclient_8cpp}{apiclient.\+cpp}}\end{DoxyCompactItemize}

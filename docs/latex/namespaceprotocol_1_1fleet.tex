@@ -1,0 +1,113 @@
+\doxysection{protocol::\+fleet Namespace Reference}
+\hypertarget{namespaceprotocol_1_1fleet}{}\label{namespaceprotocol_1_1fleet}\index{protocol::fleet@{protocol::fleet}}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} = QVector$<$QVector$<$bool$>$$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{Placement\+Error}} \{ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a6adf97f83acf6453d4a6a4b1070f3754}{None}}
+, \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a46dc1018ac1d8fca7c2752a61ce2fd0f}{Out\+Of\+Bounds}}
+, \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075ad09c072ea888b253f3ff094ce5ed1650}{Overlap\+Or\+Touch}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a147dbfd5685c27e2b55eb80bc695bb97}{in\+Bounds}} (int x, int y)
+\item 
+\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a29c52a8aca26d9ae9ad7e2a764ae5825}{create\+Occupancy\+Grid}} ()
+\item 
+QVector$<$ QPoint $>$ \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a21aec14283527a2d1f0589c6c46eab95}{ship\+Cells}} (const \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} \&placement)
+\item 
+\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{Placement\+Error}} \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_afdaa6bfe2c40f83732060b5290355d52}{validate\+Ship\+Placement}} (const \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \&occupied, const QVector$<$ QPoint $>$ \&cells)
+\item 
+void \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1ebaea4255070a9c2f38c3ccccbd541a}{occupy\+Ship\+Cells}} (\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \&occupied, const QVector$<$ QPoint $>$ \&cells)
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_ae15e88128d479131a0b509bde6818901}{matches\+Fleet\+Specification}} (const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&placements)
+\end{DoxyCompactItemize}
+
+
+\label{doc-typedef-members}
+\Hypertarget{namespaceprotocol_1_1fleet_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}\index{protocol::fleet@{protocol::fleet}!OccupancyGrid@{OccupancyGrid}}
+\index{OccupancyGrid@{OccupancyGrid}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{OccupancyGrid}{OccupancyGrid}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264} 
+using \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{protocol::\+fleet::\+\+Occupancy\+Grid}} = QVector$<$QVector$<$bool$>$$>$}
+
+
+
+\label{doc-enum-members}
+\Hypertarget{namespaceprotocol_1_1fleet_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}\index{protocol::fleet@{protocol::fleet}!PlacementError@{PlacementError}}
+\index{PlacementError@{PlacementError}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{PlacementError}{PlacementError}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075} 
+enum class \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{protocol::\+fleet::\+\+Placement\+Error}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{None@{None}!protocol::fleet@{protocol::fleet}}
+\index{protocol::fleet@{protocol::fleet}!None@{None}}
+}\Hypertarget{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a6adf97f83acf6453d4a6a4b1070f3754}\label{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a6adf97f83acf6453d4a6a4b1070f3754} 
+None&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OutOfBounds@{OutOfBounds}!protocol::fleet@{protocol::fleet}}
+\index{protocol::fleet@{protocol::fleet}!OutOfBounds@{OutOfBounds}}
+}\Hypertarget{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a46dc1018ac1d8fca7c2752a61ce2fd0f}\label{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075a46dc1018ac1d8fca7c2752a61ce2fd0f} 
+Out\+Of\+Bounds&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OverlapOrTouch@{OverlapOrTouch}!protocol::fleet@{protocol::fleet}}
+\index{protocol::fleet@{protocol::fleet}!OverlapOrTouch@{OverlapOrTouch}}
+}\Hypertarget{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075ad09c072ea888b253f3ff094ce5ed1650}\label{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075ad09c072ea888b253f3ff094ce5ed1650} 
+Overlap\+Or\+Touch&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{namespaceprotocol_1_1fleet_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceprotocol_1_1fleet_a29c52a8aca26d9ae9ad7e2a764ae5825}\index{protocol::fleet@{protocol::fleet}!createOccupancyGrid@{createOccupancyGrid}}
+\index{createOccupancyGrid@{createOccupancyGrid}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{createOccupancyGrid()}{createOccupancyGrid()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_a29c52a8aca26d9ae9ad7e2a764ae5825} 
+\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} protocol::\+fleet::\+create\+Occupancy\+Grid (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_1_1fleet_a147dbfd5685c27e2b55eb80bc695bb97}\index{protocol::fleet@{protocol::fleet}!inBounds@{inBounds}}
+\index{inBounds@{inBounds}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{inBounds()}{inBounds()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_a147dbfd5685c27e2b55eb80bc695bb97} 
+bool protocol::\+fleet::\+in\+Bounds (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{y}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_1_1fleet_ae15e88128d479131a0b509bde6818901}\index{protocol::fleet@{protocol::fleet}!matchesFleetSpecification@{matchesFleetSpecification}}
+\index{matchesFleetSpecification@{matchesFleetSpecification}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{matchesFleetSpecification()}{matchesFleetSpecification()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_ae15e88128d479131a0b509bde6818901} 
+bool protocol::\+fleet::\+matches\+Fleet\+Specification (\begin{DoxyParamCaption}\item[{const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&}]{placements}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_1_1fleet_a1ebaea4255070a9c2f38c3ccccbd541a}\index{protocol::fleet@{protocol::fleet}!occupyShipCells@{occupyShipCells}}
+\index{occupyShipCells@{occupyShipCells}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{occupyShipCells()}{occupyShipCells()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_a1ebaea4255070a9c2f38c3ccccbd541a} 
+void protocol::\+fleet::\+occupy\+Ship\+Cells (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \&}]{occupied}{, }\item[{const QVector$<$ QPoint $>$ \&}]{cells}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_1_1fleet_a21aec14283527a2d1f0589c6c46eab95}\index{protocol::fleet@{protocol::fleet}!shipCells@{shipCells}}
+\index{shipCells@{shipCells}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{shipCells()}{shipCells()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_a21aec14283527a2d1f0589c6c46eab95} 
+QVector$<$ QPoint $>$ protocol::\+fleet::\+ship\+Cells (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} \&}]{placement}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_1_1fleet_afdaa6bfe2c40f83732060b5290355d52}\index{protocol::fleet@{protocol::fleet}!validateShipPlacement@{validateShipPlacement}}
+\index{validateShipPlacement@{validateShipPlacement}!protocol::fleet@{protocol::fleet}}
+\doxysubsubsection{\texorpdfstring{validateShipPlacement()}{validateShipPlacement()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_1_1fleet_afdaa6bfe2c40f83732060b5290355d52} 
+\doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a3c5d56e8cacf92854029df5a5b08f075}{Placement\+Error}} protocol::\+fleet::\+validate\+Ship\+Placement (\begin{DoxyParamCaption}\item[{const \doxymbox{\hyperlink{namespaceprotocol_1_1fleet_a1953a379c4acf7c6418b3ef88a2fc264}{Occupancy\+Grid}} \&}]{occupied}{, }\item[{const QVector$<$ QPoint $>$ \&}]{cells}{}\end{DoxyParamCaption})}
+

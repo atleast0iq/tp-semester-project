@@ -1,0 +1,53 @@
+\doxysection{apiclient.\+h}
+\hypertarget{apiclient_8h_source}{}\label{apiclient_8h_source}\index{src/client/apiclient.h@{src/client/apiclient.h}}
+\doxymbox{\hyperlink{apiclient_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <QHash>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QJsonObject>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QObject>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <QTcpSocket>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }ApiClient\ final\ :\ \textcolor{keyword}{public}\ QObject\ \{}
+\DoxyCodeLine{00010\ \ \ Q\_OBJECT}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \textcolor{keyword}{static}\ ApiClient\&\ \doxymbox{\hyperlink{class_api_client_aed53f04f7ffef3b01dbd15dd3122e021}{instance}}();}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_api_client_aa93bafb15eab582ca6d576422def276f}{connectToServer}}(\textcolor{keyword}{const}\ QString\&\ host,\ quint16\ port,\ \textcolor{keywordtype}{int}\ timeoutMs,}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\&\ error);}
+\DoxyCodeLine{00017\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_api_client_abfdfffc71a821fe5cc315e41622a4269}{disconnectFromServer}}();}
+\DoxyCodeLine{00018\ \ \ \textcolor{keywordtype}{bool}\ \doxymbox{\hyperlink{class_api_client_ac8874a09051b1ecd112732cb3c8979d0}{isConnected}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00019\ \ \ QJsonObject\ \doxymbox{\hyperlink{class_api_client_a45796fbb3ec3a0fa45964134b9deb5e5}{sendRequest}}(\textcolor{keyword}{const}\ QString\&\ action,\ \textcolor{keyword}{const}\ QJsonObject\&\ payload,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ timeoutMs,\ QString\&\ error);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ signals:}
+\DoxyCodeLine{00023\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_api_client_a5de8724f84d5c90a2b32fa0e17e0ad43}{notificationReceived}}(\textcolor{keyword}{const}\ QJsonObject\&\ notification);}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{class_api_client_aa1de8f4772691184576eb9b73a673682}{protocolErrorReceived}}(\textcolor{keyword}{const}\ QString\&\ error);}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ ApiClient();}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ QString\ nextRequestId();}
+\DoxyCodeLine{00030\ \ \ \textcolor{keywordtype}{bool}\ takePendingResponse(\textcolor{keyword}{const}\ QString\&\ requestId,\ QJsonObject\&\ response);}
+\DoxyCodeLine{00031\ \ \ \textcolor{keywordtype}{bool}\ takePendingProtocolError(QString\&\ error);}
+\DoxyCodeLine{00032\ \ \ QString\ waitFailureMessage()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00033\ \ \ \textcolor{keywordtype}{bool}\ waitForResponse(\textcolor{keyword}{const}\ QString\&\ requestId,\ \textcolor{keywordtype}{int}\ timeoutMs,}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QJsonObject\&\ response,\ QString\&\ error);}
+\DoxyCodeLine{00035\ \ \ \textcolor{keywordtype}{void}\ handleParsedMessage(\textcolor{keyword}{const}\ QJsonObject\&\ message);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \textcolor{keyword}{private}\ slots:}
+\DoxyCodeLine{00038\ \ \ \textcolor{keywordtype}{void}\ onReadyRead();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00041\ \ \ QTcpSocket\ m\_socket;}
+\DoxyCodeLine{00042\ \ \ QHash<QString,\ QJsonObject>\ m\_pendingResponses;}
+\DoxyCodeLine{00043\ \ \ QString\ m\_host;}
+\DoxyCodeLine{00044\ \ \ QString\ m\_lastProtocolError;}
+\DoxyCodeLine{00045\ \ \ quint16\ m\_port\ =\ 0;}
+\DoxyCodeLine{00046\ \ \ quint64\ m\_requestCounter\ =\ 0;}
+\DoxyCodeLine{00047\ \};}
+
+\end{DoxyCode}

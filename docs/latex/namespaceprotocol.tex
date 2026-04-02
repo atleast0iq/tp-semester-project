@@ -1,0 +1,126 @@
+\doxysection{protocol Namespace Reference}
+\hypertarget{namespaceprotocol}{}\label{namespaceprotocol}\index{protocol@{protocol}}
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \doxymbox{\hyperlink{namespaceprotocol_1_1fleet}{fleet}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}}
+\item 
+struct \doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{Message\+Parse\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const QVector$<$ int $>$ \& \doxymbox{\hyperlink{namespaceprotocol_a0fd1b187095a4ad00fa7041c88bc9d89}{fleet\+Specification}} ()
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_a2c43902df9ffe603edd57b2340c1b449}{json\+Value\+To\+Int}} (const QJson\+Value \&value, int \&result)
+\item 
+QByte\+Array \doxymbox{\hyperlink{namespaceprotocol_a86c54eb7dd880e437670146ced9752ab}{serialize\+Line}} (const QJson\+Object \&message)
+\item 
+\doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{Message\+Parse\+Result}} \doxymbox{\hyperlink{namespaceprotocol_a41a88d0dd04f8f49fc4455344935a2ad}{parse\+Message\+Line}} (QByte\+Array line)
+\item 
+QJson\+Object \doxymbox{\hyperlink{namespaceprotocol_a2b962212c5797d57875f5c0eb162fb8b}{make\+Success\+Response}} (const QString \&request\+Id, const QJson\+Object \&payload)
+\item 
+QJson\+Object \doxymbox{\hyperlink{namespaceprotocol_a8d070558139df1c97efd8fd86d88ad8c}{make\+Error\+Response}} (const QString \&request\+Id, const QString \&code, const QString \&message)
+\item 
+QJson\+Object \doxymbox{\hyperlink{namespaceprotocol_a7b872f974bd0ca5ca01f07698adab0aa}{make\+Event\+Message}} (const QString \&event\+Name, const QJson\+Object \&payload)
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_a978b421d0a7e2854a9afe695ce0cfb47}{is\+Event\+Message}} (const QJson\+Object \&message)
+\item 
+QJson\+Array \doxymbox{\hyperlink{namespaceprotocol_af208909d93907ea89036f5142218c799}{ship\+Placements\+To\+Json}} (const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&placements)
+\item 
+bool \doxymbox{\hyperlink{namespaceprotocol_a1b5f36e3cd80d66821e0f7e3b65c8749}{ship\+Placements\+From\+Json}} (const QJson\+Value \&value, QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&placements, QString \&error)
+\item 
+QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \doxymbox{\hyperlink{namespaceprotocol_adaccbd44f7aa8166192e14bf9e2ba627}{generate\+Random\+Fleet}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+constexpr int \doxymbox{\hyperlink{namespaceprotocol_af9ff5a713b3f5db507073645c4725c38}{k\+Board\+Size}} = 10
+\end{DoxyCompactItemize}
+
+
+\label{doc-func-members}
+\Hypertarget{namespaceprotocol_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespaceprotocol_a0fd1b187095a4ad00fa7041c88bc9d89}\index{protocol@{protocol}!fleetSpecification@{fleetSpecification}}
+\index{fleetSpecification@{fleetSpecification}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{fleetSpecification()}{fleetSpecification()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a0fd1b187095a4ad00fa7041c88bc9d89} 
+const QVector$<$ int $>$ \& protocol::\+fleet\+Specification (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_adaccbd44f7aa8166192e14bf9e2ba627}\index{protocol@{protocol}!generateRandomFleet@{generateRandomFleet}}
+\index{generateRandomFleet@{generateRandomFleet}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{generateRandomFleet()}{generateRandomFleet()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_adaccbd44f7aa8166192e14bf9e2ba627} 
+QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ protocol::\+generate\+Random\+Fleet (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a978b421d0a7e2854a9afe695ce0cfb47}\index{protocol@{protocol}!isEventMessage@{isEventMessage}}
+\index{isEventMessage@{isEventMessage}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{isEventMessage()}{isEventMessage()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a978b421d0a7e2854a9afe695ce0cfb47} 
+bool protocol::\+is\+Event\+Message (\begin{DoxyParamCaption}\item[{const QJson\+Object \&}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a2c43902df9ffe603edd57b2340c1b449}\index{protocol@{protocol}!jsonValueToInt@{jsonValueToInt}}
+\index{jsonValueToInt@{jsonValueToInt}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{jsonValueToInt()}{jsonValueToInt()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a2c43902df9ffe603edd57b2340c1b449} 
+bool protocol::\+json\+Value\+To\+Int (\begin{DoxyParamCaption}\item[{const QJson\+Value \&}]{value}{, }\item[{int \&}]{result}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a8d070558139df1c97efd8fd86d88ad8c}\index{protocol@{protocol}!makeErrorResponse@{makeErrorResponse}}
+\index{makeErrorResponse@{makeErrorResponse}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{makeErrorResponse()}{makeErrorResponse()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a8d070558139df1c97efd8fd86d88ad8c} 
+QJson\+Object protocol::\+make\+Error\+Response (\begin{DoxyParamCaption}\item[{const QString \&}]{request\+Id}{, }\item[{const QString \&}]{code}{, }\item[{const QString \&}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a7b872f974bd0ca5ca01f07698adab0aa}\index{protocol@{protocol}!makeEventMessage@{makeEventMessage}}
+\index{makeEventMessage@{makeEventMessage}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{makeEventMessage()}{makeEventMessage()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a7b872f974bd0ca5ca01f07698adab0aa} 
+QJson\+Object protocol::\+make\+Event\+Message (\begin{DoxyParamCaption}\item[{const QString \&}]{event\+Name}{, }\item[{const QJson\+Object \&}]{payload}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a2b962212c5797d57875f5c0eb162fb8b}\index{protocol@{protocol}!makeSuccessResponse@{makeSuccessResponse}}
+\index{makeSuccessResponse@{makeSuccessResponse}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{makeSuccessResponse()}{makeSuccessResponse()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a2b962212c5797d57875f5c0eb162fb8b} 
+QJson\+Object protocol::\+make\+Success\+Response (\begin{DoxyParamCaption}\item[{const QString \&}]{request\+Id}{, }\item[{const QJson\+Object \&}]{payload}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a41a88d0dd04f8f49fc4455344935a2ad}\index{protocol@{protocol}!parseMessageLine@{parseMessageLine}}
+\index{parseMessageLine@{parseMessageLine}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{parseMessageLine()}{parseMessageLine()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a41a88d0dd04f8f49fc4455344935a2ad} 
+\doxymbox{\hyperlink{structprotocol_1_1_message_parse_result}{Message\+Parse\+Result}} protocol::\+parse\+Message\+Line (\begin{DoxyParamCaption}\item[{QByte\+Array}]{line}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a86c54eb7dd880e437670146ced9752ab}\index{protocol@{protocol}!serializeLine@{serializeLine}}
+\index{serializeLine@{serializeLine}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{serializeLine()}{serializeLine()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a86c54eb7dd880e437670146ced9752ab} 
+QByte\+Array protocol::\+serialize\+Line (\begin{DoxyParamCaption}\item[{const QJson\+Object \&}]{message}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_a1b5f36e3cd80d66821e0f7e3b65c8749}\index{protocol@{protocol}!shipPlacementsFromJson@{shipPlacementsFromJson}}
+\index{shipPlacementsFromJson@{shipPlacementsFromJson}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{shipPlacementsFromJson()}{shipPlacementsFromJson()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_a1b5f36e3cd80d66821e0f7e3b65c8749} 
+bool protocol::\+ship\+Placements\+From\+Json (\begin{DoxyParamCaption}\item[{const QJson\+Value \&}]{value}{, }\item[{QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&}]{placements}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{namespaceprotocol_af208909d93907ea89036f5142218c799}\index{protocol@{protocol}!shipPlacementsToJson@{shipPlacementsToJson}}
+\index{shipPlacementsToJson@{shipPlacementsToJson}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{shipPlacementsToJson()}{shipPlacementsToJson()}}
+{\footnotesize\ttfamily \label{namespaceprotocol_af208909d93907ea89036f5142218c799} 
+QJson\+Array protocol::\+ship\+Placements\+To\+Json (\begin{DoxyParamCaption}\item[{const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{Ship\+Placement}} $>$ \&}]{placements}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-var-members}
+\Hypertarget{namespaceprotocol_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{namespaceprotocol_af9ff5a713b3f5db507073645c4725c38}\index{protocol@{protocol}!kBoardSize@{kBoardSize}}
+\index{kBoardSize@{kBoardSize}!protocol@{protocol}}
+\doxysubsubsection{\texorpdfstring{kBoardSize}{kBoardSize}}
+{\footnotesize\ttfamily \label{namespaceprotocol_af9ff5a713b3f5db507073645c4725c38} 
+int protocol::\+k\+Board\+Size = 10\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+

@@ -1,0 +1,86 @@
+\doxysection{Game\+Board Class Reference}
+\hypertarget{class_game_board}{}\label{class_game_board}\index{GameBoard@{GameBoard}}
+
+
+{\ttfamily \+\#include $<$gameboard.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{struct_game_board_1_1_fire_result}{Fire\+Result}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{class_game_board_ac622cadcc81b3ffb71d8feb4506c04ac}{Game\+Board}} ()
+\item 
+bool \doxymbox{\hyperlink{class_game_board_aee8ac1989d61835d3f27620afa9e370d}{place\+Fleet}} (const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{protocol::\+\+Ship\+Placement}} $>$ \&placements, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_game_board_a36a08fcd0c113557bae65e8e024c6ca4}{fire\+At}} (int x, int y, \doxymbox{\hyperlink{struct_game_board_1_1_fire_result}{Fire\+Result}} \&result, QString \&error)
+\item 
+bool \doxymbox{\hyperlink{class_game_board_a544309b4d7a6bacfc84b967f08d87322}{fleet\+Ready}} () const
+\item 
+bool \doxymbox{\hyperlink{class_game_board_a49a2559525940a685e4eeb207c77563b}{all\+Ships\+Sunk}} () const
+\item 
+int \doxymbox{\hyperlink{class_game_board_a93e2143fc335683454bc81a801f7bafd}{ships\+Remaining}} () const
+\item 
+QJson\+Array \doxymbox{\hyperlink{class_game_board_a038d8cb6f03fbf537ae1adbbe3fb87a7}{to\+Json\+Rows}} (bool reveal\+Ships) const
+\end{DoxyCompactItemize}
+
+
+\label{doc-constructors}
+\Hypertarget{class_game_board_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_game_board_ac622cadcc81b3ffb71d8feb4506c04ac}\index{GameBoard@{GameBoard}!GameBoard@{GameBoard}}
+\index{GameBoard@{GameBoard}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{GameBoard()}{GameBoard()}}
+{\footnotesize\ttfamily \label{class_game_board_ac622cadcc81b3ffb71d8feb4506c04ac} 
+Game\+Board::\+\+Game\+Board (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\label{doc-func-members}
+\Hypertarget{class_game_board_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_game_board_a49a2559525940a685e4eeb207c77563b}\index{GameBoard@{GameBoard}!allShipsSunk@{allShipsSunk}}
+\index{allShipsSunk@{allShipsSunk}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{allShipsSunk()}{allShipsSunk()}}
+{\footnotesize\ttfamily \label{class_game_board_a49a2559525940a685e4eeb207c77563b} 
+bool Game\+Board::\+all\+Ships\+Sunk (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_board_a36a08fcd0c113557bae65e8e024c6ca4}\index{GameBoard@{GameBoard}!fireAt@{fireAt}}
+\index{fireAt@{fireAt}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{fireAt()}{fireAt()}}
+{\footnotesize\ttfamily \label{class_game_board_a36a08fcd0c113557bae65e8e024c6ca4} 
+bool Game\+Board::\+fire\+At (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{y}{, }\item[{\doxymbox{\hyperlink{struct_game_board_1_1_fire_result}{Fire\+Result}} \&}]{result}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_game_board_a544309b4d7a6bacfc84b967f08d87322}\index{GameBoard@{GameBoard}!fleetReady@{fleetReady}}
+\index{fleetReady@{fleetReady}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{fleetReady()}{fleetReady()}}
+{\footnotesize\ttfamily \label{class_game_board_a544309b4d7a6bacfc84b967f08d87322} 
+bool Game\+Board::\+fleet\+Ready (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_board_aee8ac1989d61835d3f27620afa9e370d}\index{GameBoard@{GameBoard}!placeFleet@{placeFleet}}
+\index{placeFleet@{placeFleet}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{placeFleet()}{placeFleet()}}
+{\footnotesize\ttfamily \label{class_game_board_aee8ac1989d61835d3f27620afa9e370d} 
+bool Game\+Board::\+place\+Fleet (\begin{DoxyParamCaption}\item[{const QVector$<$ \doxymbox{\hyperlink{structprotocol_1_1_ship_placement}{protocol::\+\+Ship\+Placement}} $>$ \&}]{placements}{, }\item[{QString \&}]{error}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_game_board_a93e2143fc335683454bc81a801f7bafd}\index{GameBoard@{GameBoard}!shipsRemaining@{shipsRemaining}}
+\index{shipsRemaining@{shipsRemaining}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{shipsRemaining()}{shipsRemaining()}}
+{\footnotesize\ttfamily \label{class_game_board_a93e2143fc335683454bc81a801f7bafd} 
+int Game\+Board::\+ships\+Remaining (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const}
+
+\Hypertarget{class_game_board_a038d8cb6f03fbf537ae1adbbe3fb87a7}\index{GameBoard@{GameBoard}!toJsonRows@{toJsonRows}}
+\index{toJsonRows@{toJsonRows}!GameBoard@{GameBoard}}
+\doxysubsubsection{\texorpdfstring{toJsonRows()}{toJsonRows()}}
+{\footnotesize\ttfamily \label{class_game_board_a038d8cb6f03fbf537ae1adbbe3fb87a7} 
+QJson\+Array Game\+Board::\+to\+Json\+Rows (\begin{DoxyParamCaption}\item[{bool}]{reveal\+Ships}{}\end{DoxyParamCaption}) const}
+
+
+
+The documentation for this class was generated from the following files:\+\begin{DoxyCompactItemize}
+\item 
+src/\+server/\+\doxymbox{\hyperlink{gameboard_8h}{gameboard.\+h}}\item 
+src/\+server/\+\doxymbox{\hyperlink{gameboard_8cpp}{gameboard.\+cpp}}\end{DoxyCompactItemize}
