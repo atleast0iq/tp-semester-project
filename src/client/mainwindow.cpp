@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "gamewindow.h"
 
 #include "apiclient.h"
 
@@ -44,6 +45,9 @@ void MainWindow::setupConnections()
 
   connect(ui->CreateGameButton, &QPushButton::clicked,
           this, &MainWindow::handleCreateGame);
+
+  connect(ui->JoinGameButton, &QPushButton::clicked,
+          this, &MainWindow::handleJoinGame);
 }
 
 void MainWindow::handleConnect()
@@ -211,7 +215,7 @@ void MainWindow::handleCreateGame()
 
   QString error;
   const QJsonObject response =
-      ApiClient::instance().sendRequest("create_game", {}, 3000, error);
+      ApiClient::instance().sendRequest("create_game", QJsonObject{}, 3000, error);
 
   if (!error.isEmpty()) {
     showError("Ошибка create_game", error);
@@ -232,16 +236,118 @@ void MainWindow::handleCreateGame()
   const QJsonObject payload = response.value("payload").toObject();
   const QString gameId = payload.value("gameId").toString();
 
+  QJsonObject shipsPayload;
+  shipsPayload["gameId"] = gameId;
+
+  QString shipsError;
+  const QJsonObject shipsResponse =
+      ApiClient::instance().sendRequest("place_random_ships", shipsPayload, 3000, shipsError);
+
+  if (!shipsError.isEmpty()) {
+    showError("Ошибка place_random_ships", shipsError);
+    return;
+  }
+
+  qDebug() << "place_random_ships successful:" << shipsResponse;
+
   ui->statusbar->showMessage(
       QString("Игра создана: %1").arg(gameId.isEmpty() ? "без ID" : gameId));
   QMessageBox::information(
-      this, "Успех",
+      this,
+      "Успех",
       gameId.isEmpty()
           ? "Игра успешно создана"
           : QString("Игра успешно создана.\nID: %1").arg(gameId));
   qDebug() << "create_game successful:" << response;
 
   handleRefresh();
+
+  const QString username = ui->CurrentUser->text();
+
+  if (new_gameWindow == nullptr) {
+    new_gameWindow = new GameWindow(gameId, username, this);
+  }
+
+  new_gameWindow->show();
+  new_gameWindow->raise();
+  new_gameWindow->activateWindow();
+}
+
+void MainWindow::handleJoinGame()
+{
+  if (!ensureConnected()) {
+    return;
+  }
+
+  const int currentRow = ui->GamesTable->currentRow();
+  if (currentRow < 0) {
+    QMessageBox::warning(this, "Ошибка", "Сначала выберите игру из таблицы");
+    return;
+  }
+
+  QTableWidgetItem* idItem = ui->GamesTable->item(currentRow, 0);
+  if (idItem == nullptr) {
+    QMessageBox::warning(this, "Ошибка", "Не удалось получить ID игры");
+    return;
+  }
+
+  const QString gameId = idItem->text().trimmed();
+  if (gameId.isEmpty()) {
+    QMessageBox::warning(this, "Ошибка", "ID игры пустой");
+    return;
+  }
+
+  QJsonObject payload;
+  payload["gameId"] = gameId;
+
+  QString error;
+  const QJsonObject response =
+      ApiClient::instance().sendRequest("join_game", payload, 3000, error);
+
+  if (!error.isEmpty()) {
+    showError("Ошибка join_game", error);
+    return;
+  }
+
+  const QString status = response.value("status").toString();
+  if (status != "ok") {
+    const QJsonObject errorObj = response.value("error").toObject();
+    const QString message =
+        errorObj.value("message").toString("join_game failed");
+    QMessageBox::warning(this, "Ошибка", message);
+    ui->statusbar->showMessage("Не удалось войти в игру");
+    qDebug() << "join_game failed:" << response;
+    return;
+  }
+
+  ui->statusbar->showMessage(QString("Вход в игру: %1").arg(gameId));
+  QMessageBox::information(
+      this,
+      "Успех",
+      QString("Вы вошли в игру.\nID: %1").arg(gameId));
+  qDebug() << "join_game successful:" << response;
+
+  QJsonObject shipsPayload;
+  shipsPayload["gameId"] = gameId;
+
+  QString shipsError;
+  ApiClient::instance().sendRequest("place_random_ships", shipsPayload, 3000, shipsError);
+
+  if (!shipsError.isEmpty()) {
+    showError("Ошибка place_random_ships", shipsError);
+    return;
+  }
+
+
+  const QString username = ui->CurrentUser->text();
+
+  if (new_gameWindow == nullptr) {
+    new_gameWindow = new GameWindow(gameId, username, this);
+  }
+
+  new_gameWindow->show();
+  new_gameWindow->raise();
+  new_gameWindow->activateWindow();
 }
 
 bool MainWindow::ensureConnected()

@@ -32,7 +32,7 @@ option(BATTLESHIP_BUILD_CLIENT "Build the Qt TCP test client" ON)
 option(BATTLESHIP_BUILD_SERVER "Build the TCP battleship server" ON)
 
 if(BATTLESHIP_BUILD_CLIENT OR BATTLESHIP_BUILD_SERVER)
-    set(BATTLESHIP_QT_COMPONENTS Core Network Widgets)
+    set(BATTLESHIP_QT_COMPONENTS Core Network Widgets Multimedia)
 
     if(BATTLESHIP_BUILD_SERVER)
         list(APPEND BATTLESHIP_QT_COMPONENTS Sql)

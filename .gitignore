@@ -2,6 +2,12 @@ build/
 compile_commands.json
 .cache
 .vscode
+*.exe
+*.o
+*.obj
+*.dll
+*.user
+*.autosave
 
 
 .qtcreator/

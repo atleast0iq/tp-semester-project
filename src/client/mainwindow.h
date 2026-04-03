@@ -7,6 +7,7 @@
 namespace Ui {
 class MainWindow;
 }
+class GameWindow;
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -15,16 +16,21 @@ class MainWindow : public QMainWindow {
   explicit MainWindow(QWidget* parent = nullptr);
   ~MainWindow();
 
+
  private:
   Ui::MainWindow* ui;
+  GameWindow* new_gameWindow = nullptr;
 
   void setupUIState();
   void setupConnections();
+
   void handleConnect();
   void handleLogin();
   void handleRegister();
   void handleRefresh();
   void handleCreateGame();
+  void handleJoinGame();
+
 
 
 
