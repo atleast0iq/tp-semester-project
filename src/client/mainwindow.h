@@ -1,37 +1,43 @@
-#pragma once
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTcpSocket>
+#include <QString>
 
-class QLineEdit;
-class QPushButton;
-class QTextEdit;
+namespace Ui {
+class MainWindow;
+}
+class GameWindow;
 
-class MainWindow final : public QMainWindow {
+class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
   explicit MainWindow(QWidget* parent = nullptr);
+  ~MainWindow();
 
- private slots:
-  void connectToServer();
-  void disconnectFromServer();
-  void sendMessage();
-  void onConnected();
-  void onDisconnected();
-  void onReadyRead();
-  void onSocketError(QAbstractSocket::SocketError socketError);
 
  private:
-  void appendLogMessage(const QString& message);
-  void updateUiState(bool connected);
+  Ui::MainWindow* ui;
+  GameWindow* new_gameWindow = nullptr;
 
-  QTcpSocket* m_socket;
-  QLineEdit* m_hostEdit;
-  QLineEdit* m_portEdit;
-  QLineEdit* m_messageEdit;
-  QPushButton* m_connectButton;
-  QPushButton* m_disconnectButton;
-  QPushButton* m_sendButton;
-  QTextEdit* m_logView;
+  void setupUIState();
+  void setupConnections();
+
+  void handleConnect();
+  void handleLogin();
+  void handleRegister();
+  void handleRefresh();
+  void handleCreateGame();
+  void handleJoinGame();
+
+
+
+
+  bool ensureConnected();
+  bool validAuthInput(QString& login, QString& password);
+  void populateGamesTable(const QJsonArray& games);
+  void showError(const QString& title, const QString& message);
 };
+
+#endif  // MAINWINDOW_H

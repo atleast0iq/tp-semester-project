@@ -1,0 +1,21 @@
+services:
+  battleship_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    ports:
+      - "6767:6767"
+    volumes:
+      - battleship_data:/data
+    command:
+      - "--address"
+      - "0.0.0.0"
+      - "--port"
+      - "6767"
+      - "--database"
+      - "/data/battleship.db"
+    restart: unless-stopped
+
+volumes:
+  battleship_data:
